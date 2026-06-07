@@ -116,7 +116,6 @@ export class SymbolFinderPage extends HTMLElement {
   private showToast(message: string): void {
     if (this.snackbar?.show) {
       this.snackbar.labelText = message;
-      this.snackbar.textContent = message;
       this.snackbar.show();
       return;
     }
