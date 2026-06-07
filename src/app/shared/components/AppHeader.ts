@@ -9,6 +9,9 @@ export class AppHeader extends HTMLElement {
 
   configure(themeController: ThemeController): void {
     this.themeController = themeController;
+    if (this.isConnected) {
+      this.render();
+    }
   }
 
   connectedCallback(): void {
@@ -20,24 +23,40 @@ export class AppHeader extends HTMLElement {
     this.innerHTML = `
       <header class="app-header">
         <a class="brand" href="#app" aria-label="Symbly home">
-          <span class="brand-mark">$</span>
-          <span>
+          <span class="brand-mark">S</span>
+          <span class="brand-copy">
             <strong>Symbly</strong>
             <small>Search any symbol</small>
           </span>
         </a>
-        <label class="theme-select">
-          <span>Theme</span>
-          <select aria-label="Choose theme mode">
-            ${themeModes.map((themeMode) => `<option value="${themeMode}" ${themeMode === mode ? 'selected' : ''}>${this.label(themeMode)}</option>`).join('')}
-          </select>
-        </label>
+        <div class="header-actions">
+          <span class="material-symbol theme-icon" aria-hidden="true">${mode === 'dark' ? 'dark_mode' : mode === 'light' ? 'light_mode' : 'brightness_auto'}</span>
+          <md-outlined-select class="theme-menu" aria-label="Choose theme mode" value="${mode}">
+            ${themeModes.map((themeMode) => `
+              <md-select-option value="${themeMode}" ${themeMode === mode ? 'selected' : ''}>
+                <div slot="headline">${this.label(themeMode)}</div>
+              </md-select-option>
+            `).join('')}
+          </md-outlined-select>
+          <md-icon-button aria-label="More options">
+            <span class="material-symbol" aria-hidden="true">more_vert</span>
+          </md-icon-button>
+        </div>
       </header>
     `;
 
-    this.querySelector('select')?.addEventListener('change', (event) => {
-      const nextMode = (event.target as HTMLSelectElement).value as ThemeMode;
+    const select = this.querySelector('md-outlined-select') as HTMLElement & { value?: ThemeMode };
+    select?.addEventListener('change', () => {
+      const nextMode = (select.value ?? select.getAttribute('value') ?? 'system') as ThemeMode;
       this.themeController?.setMode(nextMode);
+      this.render();
+    });
+    this.querySelectorAll('md-select-option').forEach((option) => {
+      option.addEventListener('click', () => {
+        const nextMode = option.getAttribute('value') as ThemeMode;
+        this.themeController?.setMode(nextMode);
+        this.render();
+      });
     });
   }
 

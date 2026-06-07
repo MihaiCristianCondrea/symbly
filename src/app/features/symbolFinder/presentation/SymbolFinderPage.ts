@@ -1,6 +1,8 @@
+import '@material/web/chips/filter-chip.js';
 import '@material/web/snackbar/snackbar.js';
 import type { CopySymbolUseCase } from '../domain/CopySymbolUseCase';
 import type { SearchSymbolsUseCase } from '../domain/SearchSymbolsUseCase';
+import { symbolFilterCategories, type SymbolFilterCategory } from '../domain/SymbolCategory';
 import type { SymbolItem } from '../domain/SymbolItem';
 import type { SymbolGrid } from './SymbolGrid';
 import './SymbolGrid';
@@ -11,36 +13,38 @@ export class SymbolFinderPage extends HTMLElement {
   private snackbar?: HTMLElement & { labelText?: string; show?: () => void };
   private searchSymbolsUseCase?: SearchSymbolsUseCase;
   private copySymbolUseCase?: CopySymbolUseCase;
+  private query = '';
+  private category: SymbolFilterCategory = 'Popular';
 
   configure(searchSymbolsUseCase: SearchSymbolsUseCase, copySymbolUseCase: CopySymbolUseCase): void {
     this.searchSymbolsUseCase = searchSymbolsUseCase;
     this.copySymbolUseCase = copySymbolUseCase;
     if (this.isConnected) {
-      void this.search('');
+      void this.search();
     }
   }
 
   connectedCallback(): void {
     this.render();
-    void this.search('');
+    void this.search();
   }
 
   private render(): void {
     this.innerHTML = `
       <section class="hero" aria-labelledby="hero-title">
-        <p class="eyebrow">Symbol finder</p>
-        <h1 id="hero-title">Symbly</h1>
-        <p class="tagline">Search any symbol</p>
-        <p class="hero-copy">Find and copy symbols in seconds, from currency signs and arrows to math operators, punctuation, legal marks, Greek letters, and developer symbols.</p>
+        <div class="hero-shape" aria-hidden="true">S</div>
+        <div class="hero-content">
+          <h1 id="hero-title">Search any symbol</h1>
+          <p class="hero-copy">Find and copy symbols in seconds. From currency signs and arrows to math operators, punctuation, legal marks, and developer symbols.</p>
+        </div>
       </section>
-      <section class="seo-summary" aria-labelledby="seo-summary-title">
-        <h2 id="seo-summary-title">Quick access to common symbols</h2>
-        <p>Use Symbly to search for the euro symbol, dollar symbol, pound symbol, yen symbol, copyright symbol, trademark symbol, checkmark symbol, arrow symbols, math symbols, and other copy symbols without digging through character maps.</p>
-      </section>
-      <section class="finder-card" aria-label="Search and copy symbols">
+      <section class="finder-area" aria-label="Search and copy symbols">
         <symbol-search-bar></symbol-search-bar>
+        <div class="category-chips" aria-label="Filter symbol categories" role="listbox">
+          ${symbolFilterCategories.map((category) => this.renderChip(category)).join('')}
+        </div>
         <div class="results-heading">
-          <h2>Popular symbols</h2>
+          <h2>${this.headingText()}</h2>
           <span class="results-count"></span>
         </div>
         <symbol-grid></symbol-grid>
@@ -51,24 +55,53 @@ export class SymbolFinderPage extends HTMLElement {
     this.grid = this.querySelector('symbol-grid') as SymbolGrid;
     this.snackbar = this.querySelector('md-snackbar') as HTMLElement & { labelText?: string; show?: () => void };
     this.addEventListener('symbol-search', (event) => {
-      const value = (event as CustomEvent<string>).detail;
-      void this.search(value);
+      this.query = (event as CustomEvent<string>).detail;
+      void this.search();
     });
+
+    this.querySelectorAll('md-filter-chip').forEach((chip) => {
+      chip.addEventListener('click', () => {
+        this.category = chip.getAttribute('data-category') as SymbolFilterCategory;
+        this.updateSelectedChip();
+        void this.search();
+      });
+    });
+
     this.addEventListener('copy-symbol', (event) => {
       const item = (event as CustomEvent<SymbolItem>).detail;
       void this.copy(item);
     });
   }
 
-  private async search(query: string): Promise<void> {
+  private renderChip(category: SymbolFilterCategory): string {
+    const selected = category === this.category ? 'selected' : '';
+    return `<md-filter-chip label="${category}" data-category="${category}" ${selected}></md-filter-chip>`;
+  }
+
+  private updateSelectedChip(): void {
+    this.querySelectorAll('md-filter-chip').forEach((chip) => {
+      const selected = chip.getAttribute('data-category') === this.category;
+      chip.toggleAttribute('selected', selected);
+    });
+  }
+
+  private async search(): Promise<void> {
     if (!this.searchSymbolsUseCase || !this.grid) {
       return;
     }
 
-    const items = await this.searchSymbolsUseCase.execute(query);
+    const items = await this.searchSymbolsUseCase.execute(this.query, this.category);
     this.grid.symbols = items;
-    this.querySelector('.results-heading h2')!.textContent = query.trim() ? 'Search results' : 'Popular symbols';
+    this.querySelector('.results-heading h2')!.textContent = this.headingText();
     this.querySelector('.results-count')!.textContent = `${items.length} shown`;
+  }
+
+  private headingText(): string {
+    if (this.query.trim()) {
+      return 'Search results';
+    }
+
+    return this.category === 'All' ? 'All symbols' : `${this.category} symbols`;
   }
 
   private async copy(item: SymbolItem): Promise<void> {
