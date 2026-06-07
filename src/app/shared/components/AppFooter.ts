@@ -1,50 +1,41 @@
 import '@material/web/iconbutton/icon-button.js';
+
 interface SocialLink {
   label: string;
   href: string;
-  iconClass: string;
+  icon: string;
 }
 
 const profileLinks: SocialLink[] = [
   {
-    label: 'GitHub Profile',
-    href: 'https://github.com/MihaiCristianCondrea',
-    iconClass: 'fab fa-github',
-  },
-  {
     label: 'Instagram Profile',
     href: 'https://www.instagram.com/d4rk7355608/',
-    iconClass: 'fab fa-instagram',
+    icon: 'photo_camera',
   },
   {
     label: 'YouTube Channel',
     href: 'https://www.youtube.com/@D4rK7355608',
-    iconClass: 'fab fa-youtube',
+    icon: 'smart_display',
   },
   {
     label: 'Pinterest Profile',
     href: 'https://www.pinterest.com/d4rk7355608/',
-    iconClass: 'fab fa-pinterest',
+    icon: 'palette',
   },
   {
     label: 'Send Email',
     href: 'mailto:contact.mihaicristiancondrea@gmail.com',
-    iconClass: 'material-symbol email-icon',
-  },
-  {
-    label: 'LinkedIn Profile',
-    href: 'https://www.linkedin.com/in/mihai-cristian-condrea/',
-    iconClass: 'fab fa-linkedin-in',
+    icon: 'mail',
   },
   {
     label: 'X Profile',
     href: 'https://x.com/MihaiCrstian',
-    iconClass: 'fab fa-x-twitter',
+    icon: 'close',
   },
   {
-    label: 'Facebook Profile',
-    href: 'https://www.facebook.com/d4rk7355608',
-    iconClass: 'fab fa-facebook-f',
+    label: 'LinkedIn Profile',
+    href: 'https://www.linkedin.com/in/mihai-cristian-condrea/',
+    icon: 'person',
   },
 ];
 
@@ -67,7 +58,7 @@ export class AppFooter extends HTMLElement {
       <a href="${link.href}" ${link.href.startsWith('mailto:') ? '' : 'target="_blank" rel="noopener noreferrer"'} aria-label="${link.label}" title="${this.linkTitle(link.label)}" style="--item-index: ${index};">
         <md-icon-button value="">
           <md-icon aria-hidden="true">
-            ${link.iconClass.includes('material-symbol') ? '<span class="material-symbol">email</span>' : `<i class="${link.iconClass}"></i>`}
+            <span class="material-symbol">${link.icon}</span>
           </md-icon>
         </md-icon-button>
       </a>

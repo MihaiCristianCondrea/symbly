@@ -1,3 +1,4 @@
+import '@material/web/chips/chip-set.js';
 import '@material/web/chips/filter-chip.js';
 import '@material/web/snackbar/snackbar.js';
 import type { CopySymbolUseCase } from '../domain/CopySymbolUseCase';
@@ -40,9 +41,9 @@ export class SymbolFinderPage extends HTMLElement {
       </section>
       <section class="finder-area" aria-label="Search and copy symbols">
         <symbol-search-bar></symbol-search-bar>
-        <div class="category-chips" aria-label="Filter symbol categories" role="listbox">
+        <md-chip-set class="category-chips" aria-label="Filter symbol categories">
           ${symbolFilterCategories.map((category) => this.renderChip(category)).join('')}
-        </div>
+        </md-chip-set>
         <div class="results-heading">
           <h2>${this.headingText()}</h2>
           <span class="results-count"></span>
