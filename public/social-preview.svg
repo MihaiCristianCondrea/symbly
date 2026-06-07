@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Symbly - Search Any Symbol</title>
+  <desc id="desc">Social preview for Symbly, a web app for searching and copying symbols.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FBFDF7" />
+      <stop offset="0.56" stop-color="#F4F0DF" />
+      <stop offset="1" stop-color="#DDEDDD" />
+    </linearGradient>
+    <linearGradient id="mark" x1="390" y1="130" x2="520" y2="260" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#146C43" />
+      <stop offset="1" stop-color="#C59B24" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#background)" />
+  <circle cx="1025" cy="95" r="210" fill="#B9F2CF" opacity="0.7" />
+  <circle cx="100" cy="520" r="260" fill="#F3E39B" opacity="0.58" />
+  <rect x="92" y="82" width="1016" height="466" rx="56" fill="#FFFFFF" opacity="0.88" />
+  <rect x="390" y="112" width="132" height="132" rx="34" fill="url(#mark)" />
+  <text x="456" y="201" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="78" font-weight="700" fill="#FFFFFF">§</text>
+  <text x="600" y="332" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="82" font-weight="800" fill="#191C18">Symbly</text>
+  <text x="600" y="402" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="40" font-weight="700" fill="#146C43">Search Any Symbol</text>
+  <text x="600" y="466" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="30" fill="#5B6257">€, $, £, ¥, ©, ™, ✓, arrows, math, punctuation</text>
+</svg>
