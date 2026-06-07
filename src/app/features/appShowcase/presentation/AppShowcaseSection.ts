@@ -69,7 +69,7 @@ export class AppShowcaseSection extends HTMLElement {
     return `
       <div class="section-heading">
         <h2 id="showcase-title">More apps from Mihai-Cristian</h2>
-        <a class="view-all-link" href="https://play.google.com/store/apps/dev?id=5396050437193143710" target="_blank" rel="noopener noreferrer">
+        <a class="view-all-link" href="https://play.google.com/store/apps/dev?id=5390214922640123642" target="_blank" rel="noopener noreferrer">
           <md-text-button>View all apps</md-text-button>
         </a>
       </div>
