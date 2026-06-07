@@ -1,4 +1,5 @@
 import '@material/web/button/outlined-button.js';
+import '@material/web/icon/icon.js';
 import type { AppItem } from '../domain/AppItem';
 
 export class AppCard extends HTMLElement {
@@ -9,7 +10,7 @@ export class AppCard extends HTMLElement {
   private render(app: AppItem): void {
     const icon = app.iconUrl
       ? `<img src="${this.escapeAttribute(app.iconUrl)}" alt="" loading="lazy" />`
-      : '<span class="app-icon-placeholder">apps</span>';
+      : '<md-icon class="app-icon-placeholder">apps</md-icon>';
 
     this.innerHTML = `
       <article class="app-card">
@@ -21,7 +22,7 @@ export class AppCard extends HTMLElement {
         </div>
         <a class="play-link" href="${this.escapeAttribute(app.storeUrl)}" target="_blank" rel="noopener noreferrer" aria-label="Open ${this.escapeAttribute(app.name)} on Google Play">
           <md-outlined-button>
-            <span class="play-triangle" aria-hidden="true"></span>
+            <md-icon slot="icon">play_arrow</md-icon>
             Google Play
           </md-outlined-button>
         </a>

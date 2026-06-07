@@ -1,4 +1,5 @@
 import '@material/web/button/text-button.js';
+import '@material/web/icon/icon.js';
 import '@material/web/progress/circular-progress.js';
 import type { GetPromotedAppsUseCase } from '../domain/GetPromotedAppsUseCase';
 import type { AppItem } from '../domain/AppItem';
@@ -70,7 +71,7 @@ export class AppShowcaseSection extends HTMLElement {
       <div class="section-heading">
         <h2 id="showcase-title">More apps from Mihai-Cristian</h2>
         <a class="view-all-link" href="https://play.google.com/store/apps/dev?id=5390214922640123642" target="_blank" rel="noopener noreferrer">
-          <md-text-button>View all apps</md-text-button>
+          <md-text-button>View all apps<md-icon slot="icon">open_in_new</md-icon></md-text-button>
         </a>
       </div>
     `;
