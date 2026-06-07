@@ -9,18 +9,21 @@ export class AppCard extends HTMLElement {
   private render(app: AppItem): void {
     const icon = app.iconUrl
       ? `<img src="${this.escapeAttribute(app.iconUrl)}" alt="" loading="lazy" />`
-      : '<span class="app-icon-placeholder">◇</span>';
+      : '<span class="app-icon-placeholder">apps</span>';
 
     this.innerHTML = `
       <article class="app-card">
         <div class="app-icon">${icon}</div>
         <div class="app-content">
-          <p class="app-category">${this.escape(app.category)}</p>
           <h3>${this.escape(app.name)}</h3>
+          <p class="app-category">${this.escape(app.category)}</p>
           <p>${this.escape(app.description)}</p>
         </div>
-        <a class="play-link" href="${this.escapeAttribute(app.storeUrl)}" target="_blank" rel="noopener noreferrer">
-          <md-outlined-button>Google Play</md-outlined-button>
+        <a class="play-link" href="${this.escapeAttribute(app.storeUrl)}" target="_blank" rel="noopener noreferrer" aria-label="Open ${this.escapeAttribute(app.name)} on Google Play">
+          <md-outlined-button>
+            <span class="play-triangle" aria-hidden="true"></span>
+            Google Play
+          </md-outlined-button>
         </a>
       </article>
     `;

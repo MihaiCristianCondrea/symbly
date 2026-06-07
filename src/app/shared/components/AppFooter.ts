@@ -2,8 +2,12 @@ export class AppFooter extends HTMLElement {
   connectedCallback(): void {
     this.innerHTML = `
       <footer class="app-footer">
-        <p>Built with TypeScript, Vite, and Material 3 components.</p>
-        <p>© ${new Date().getFullYear()} Symbly</p>
+        <p>© 2026 Symbly</p>
+        <nav aria-label="Footer">
+          <a href="#about">About</a>
+          <a href="#privacy">Privacy</a>
+          <a href="#contact">Contact</a>
+        </nav>
       </footer>
     `;
   }

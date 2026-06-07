@@ -11,6 +11,18 @@ export type SymbolCategory =
   | 'Greek'
   | 'Programming';
 
+export type SymbolFilterCategory =
+  | 'Popular'
+  | 'Currency'
+  | 'Arrows'
+  | 'Math'
+  | 'Punctuation'
+  | 'Legal'
+  | 'Checkmarks'
+  | 'Greek'
+  | 'Developer'
+  | 'All';
+
 export const symbolCategories: SymbolCategory[] = [
   'Currency',
   'Arrows',
@@ -23,4 +35,17 @@ export const symbolCategories: SymbolCategory[] = [
   'Units',
   'Greek',
   'Programming',
+];
+
+export const symbolFilterCategories: SymbolFilterCategory[] = [
+  'Popular',
+  'Currency',
+  'Arrows',
+  'Math',
+  'Punctuation',
+  'Legal',
+  'Checkmarks',
+  'Greek',
+  'Developer',
+  'All',
 ];

@@ -1,4 +1,4 @@
-import '@material/web/button/filled-button.js';
+import '@material/web/iconbutton/icon-button.js';
 import type { SymbolItem } from '../domain/SymbolItem';
 
 export class SymbolCard extends HTMLElement {
@@ -19,17 +19,29 @@ export class SymbolCard extends HTMLElement {
     }
 
     this.innerHTML = `
-      <button class="symbol-card" type="button" aria-label="Copy ${this.escape(this.symbolItem.name)}">
-        <span class="symbol-glyph">${this.escape(this.symbolItem.symbol)}</span>
-        <span class="symbol-meta">
+      <article class="symbol-card" role="button" tabindex="0" aria-label="Copy ${this.escape(this.symbolItem.name)}">
+        <div class="symbol-card-top">
+          <span class="symbol-glyph">${this.escape(this.symbolItem.symbol)}</span>
+          <md-icon-button class="copy-button" aria-label="Copy ${this.escape(this.symbolItem.symbol)}">
+            <span class="material-symbol" aria-hidden="true">content_copy</span>
+          </md-icon-button>
+        </div>
+        <div class="symbol-meta">
           <strong>${this.escape(this.symbolItem.name)}</strong>
-          <small>${this.escape(this.symbolItem.category)}</small>
-        </span>
-        <md-filled-button class="copy-button" aria-label="Copy ${this.escape(this.symbolItem.symbol)}">Copy</md-filled-button>
-      </button>
+          <small>${this.escape(this.displayCategory(this.symbolItem))}</small>
+        </div>
+      </article>
     `;
 
-    this.querySelector('.symbol-card')?.addEventListener('click', () => this.copy());
+    const card = this.querySelector('.symbol-card');
+    card?.addEventListener('click', () => this.copy());
+    card?.addEventListener('keydown', (event) => {
+      const keyboardEvent = event as KeyboardEvent;
+      if (keyboardEvent.key === 'Enter' || keyboardEvent.key === ' ') {
+        keyboardEvent.preventDefault();
+        this.copy();
+      }
+    });
     this.querySelector('.copy-button')?.addEventListener('click', (event) => {
       event.stopPropagation();
       this.copy();
@@ -46,6 +58,10 @@ export class SymbolCard extends HTMLElement {
       bubbles: true,
       composed: true,
     }));
+  }
+
+  private displayCategory(item: SymbolItem): string {
+    return item.category === 'Programming' ? 'Developer' : item.category;
   }
 
   private escape(value: string): string {
