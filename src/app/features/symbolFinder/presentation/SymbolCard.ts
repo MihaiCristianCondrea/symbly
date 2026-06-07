@@ -3,14 +3,22 @@ import type { SymbolItem } from '../domain/SymbolItem';
 
 export class SymbolCard extends HTMLElement {
   private symbolItem?: SymbolItem;
+  private copied = false;
+  private resetCopiedTimeout?: number;
 
   set item(value: SymbolItem) {
     this.symbolItem = value;
+    this.copied = false;
+    window.clearTimeout(this.resetCopiedTimeout);
     this.render();
   }
 
   connectedCallback(): void {
     this.render();
+  }
+
+  disconnectedCallback(): void {
+    window.clearTimeout(this.resetCopiedTimeout);
   }
 
   private render(): void {
@@ -22,8 +30,8 @@ export class SymbolCard extends HTMLElement {
       <article class="symbol-card" role="button" tabindex="0" aria-label="Copy ${this.escape(this.symbolItem.name)}">
         <div class="symbol-card-top">
           <span class="symbol-glyph">${this.escape(this.symbolItem.symbol)}</span>
-          <md-icon-button class="copy-button" aria-label="Copy ${this.escape(this.symbolItem.symbol)}">
-            <span class="material-symbol" aria-hidden="true">content_copy</span>
+          <md-icon-button class="copy-button ${this.copied ? 'is-copied' : ''}" aria-label="${this.copied ? 'Copied' : `Copy ${this.escape(this.symbolItem.symbol)}`}">
+            <span class="material-symbol copy-icon" aria-hidden="true">${this.copied ? 'check' : 'content_copy'}</span>
           </md-icon-button>
         </div>
         <div class="symbol-meta">
@@ -53,11 +61,22 @@ export class SymbolCard extends HTMLElement {
       return;
     }
 
+    this.showCopiedState();
     this.dispatchEvent(new CustomEvent<SymbolItem>('copy-symbol', {
       detail: this.symbolItem,
       bubbles: true,
       composed: true,
     }));
+  }
+
+  private showCopiedState(): void {
+    this.copied = true;
+    this.render();
+    window.clearTimeout(this.resetCopiedTimeout);
+    this.resetCopiedTimeout = window.setTimeout(() => {
+      this.copied = false;
+      this.render();
+    }, 5000);
   }
 
   private displayCategory(item: SymbolItem): string {

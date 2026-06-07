@@ -27,8 +27,9 @@ export class SymbolGrid extends HTMLElement {
 
     this.innerHTML = '<div class="symbol-grid"></div>';
     const grid = this.querySelector('.symbol-grid')!;
-    this.items.forEach((item) => {
+    this.items.forEach((item, index) => {
       const card = document.createElement('symbol-card') as SymbolCard;
+      card.style.setProperty('--item-index', String(index));
       card.item = item;
       grid.append(card);
     });

@@ -1,57 +1,50 @@
-interface FooterLink {
+import '@material/web/iconbutton/icon-button.js';
+interface SocialLink {
   label: string;
   href: string;
-  icon: string;
+  iconClass: string;
 }
 
-const policyLinks: FooterLink[] = [
+const profileLinks: SocialLink[] = [
   {
-    label: 'Privacy Policy',
-    href: 'https://mihaicristiancondrea.github.io/profile/#privacy-policy',
-    icon: 'policy',
-  },
-  {
-    label: 'Code of Conduct',
-    href: 'https://mihaicristiancondrea.github.io/profile/#code-of-conduct',
-    icon: 'verified_user',
-  },
-];
-
-const profileLinks: FooterLink[] = [
-  {
-    label: 'GitHub',
+    label: 'GitHub Profile',
     href: 'https://github.com/MihaiCristianCondrea',
-    icon: 'code',
+    iconClass: 'fab fa-github',
   },
   {
-    label: 'Instagram',
+    label: 'Instagram Profile',
     href: 'https://www.instagram.com/d4rk7355608/',
-    icon: 'photo_camera',
+    iconClass: 'fab fa-instagram',
   },
   {
-    label: 'YouTube',
+    label: 'YouTube Channel',
     href: 'https://www.youtube.com/@D4rK7355608',
-    icon: 'smart_display',
+    iconClass: 'fab fa-youtube',
   },
   {
-    label: 'Pinterest',
-    href: 'https://ro.pinterest.com/mihaicristiancondrea/',
-    icon: 'palette',
+    label: 'Pinterest Profile',
+    href: 'https://www.pinterest.com/d4rk7355608/',
+    iconClass: 'fab fa-pinterest',
   },
   {
-    label: 'Email',
+    label: 'Send Email',
     href: 'mailto:contact.mihaicristiancondrea@gmail.com',
-    icon: 'mail',
+    iconClass: 'material-symbol email-icon',
   },
   {
-    label: 'X',
-    href: 'https://x.com/MihaiCristianC',
-    icon: 'close',
+    label: 'LinkedIn Profile',
+    href: 'https://www.linkedin.com/in/mihai-cristian-condrea/',
+    iconClass: 'fab fa-linkedin-in',
   },
   {
-    label: 'Profile',
-    href: 'https://mihaicristiancondrea.github.io/profile/',
-    icon: 'person',
+    label: 'X Profile',
+    href: 'https://x.com/MihaiCrstian',
+    iconClass: 'fab fa-x-twitter',
+  },
+  {
+    label: 'Facebook Profile',
+    href: 'https://www.facebook.com/d4rk7355608',
+    iconClass: 'fab fa-facebook-f',
   },
 ];
 
@@ -60,11 +53,8 @@ export class AppFooter extends HTMLElement {
     this.innerHTML = `
       <footer class="app-footer">
         <div class="footer-content">
-          <nav class="footer-social-links" aria-label="Profile links">
-            ${profileLinks.map((link) => this.renderLink(link, 'footer-social-link')).join('')}
-          </nav>
-          <nav class="footer-policy-links" aria-label="Policies">
-            ${policyLinks.map((link) => this.renderTextLink(link)).join('')}
+          <nav class="social-icons" aria-label="Social links">
+            ${profileLinks.map((link, index) => this.renderSocialLink(link, index)).join('')}
           </nav>
         </div>
         <div class="footer-copyright">Copyright © 2025-2026, Mihai-Cristian Condrea</div>
@@ -72,20 +62,20 @@ export class AppFooter extends HTMLElement {
     `;
   }
 
-  private renderLink(link: FooterLink, className: string): string {
+  private renderSocialLink(link: SocialLink, index: number): string {
     return `
-      <a class="${className}" href="${link.href}" target="_blank" rel="noopener noreferrer" aria-label="${link.label}">
-        <span class="material-symbol" aria-hidden="true">${link.icon}</span>
+      <a href="${link.href}" ${link.href.startsWith('mailto:') ? '' : 'target="_blank" rel="noopener noreferrer"'} aria-label="${link.label}" title="${this.linkTitle(link.label)}" style="--item-index: ${index};">
+        <md-icon-button value="">
+          <md-icon aria-hidden="true">
+            ${link.iconClass.includes('material-symbol') ? '<span class="material-symbol">email</span>' : `<i class="${link.iconClass}"></i>`}
+          </md-icon>
+        </md-icon-button>
       </a>
     `;
   }
 
-  private renderTextLink(link: FooterLink): string {
-    return `
-      <a href="${link.href}" target="_blank" rel="noopener noreferrer">
-        ${link.label}
-      </a>
-    `;
+  private linkTitle(label: string): string {
+    return label.replace(' Profile', '').replace(' Channel', '').replace('Send ', '');
   }
 }
 

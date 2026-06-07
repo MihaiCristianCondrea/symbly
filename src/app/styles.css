@@ -739,3 +739,238 @@ md-snackbar[open] {
   .footer-social-links { gap: 18px; }
   .footer-policy-links { gap: 16px; }
 }
+
+@keyframes premium-rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+
+@keyframes copied-pop {
+  0% { transform: scale(1); }
+  35% { transform: scale(0.55); opacity: 0; }
+  65% { transform: scale(1.18); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes menu-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.hero-content,
+.search-field-wrap,
+.category-chips,
+.results-heading,
+.showcase-section,
+.app-footer {
+  animation: premium-rise-in 420ms cubic-bezier(0.2, 0, 0, 1) both;
+}
+
+.search-field-wrap { animation-delay: 80ms; }
+.category-chips { animation-delay: 130ms; }
+.results-heading { animation-delay: 180ms; }
+.showcase-section { animation-delay: 220ms; }
+.app-footer { animation-delay: 260ms; }
+
+.theme-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+md-outlined-select.theme-menu {
+  min-width: 136px;
+  --md-outlined-select-container-shape: 999px;
+  --md-outlined-select-focus-outline-color: var(--md-sys-color-primary);
+  --md-outlined-select-hover-outline-color: var(--md-sys-color-primary);
+  --md-outlined-select-text-field-container-color: var(--md-sys-color-surface-container-low);
+}
+
+md-outlined-select.theme-menu select {
+  min-height: 44px;
+  border-radius: 999px;
+  box-shadow: var(--app-shadow-1);
+  cursor: pointer;
+  transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+
+md-outlined-select.theme-menu select:focus-visible {
+  border-color: var(--md-sys-color-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--md-sys-color-primary) 14%, transparent), var(--app-shadow-1);
+  outline: none;
+}
+
+.policy-menu-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.policy-menu-button {
+  color: var(--md-sys-color-on-surface);
+  background: var(--md-sys-color-surface-container-low);
+}
+
+.policy-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 30;
+  min-width: 232px;
+  padding: 8px;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: 18px;
+  background: var(--md-sys-color-surface-container-lowest);
+  box-shadow: var(--app-shadow-2);
+  transform-origin: top right;
+  animation: menu-enter 160ms cubic-bezier(0.2, 0, 0, 1) both;
+}
+
+.policy-menu[hidden] { display: none; }
+
+.policy-menu a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  padding: 0 14px;
+  border-radius: 14px;
+  color: var(--md-sys-color-on-surface);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.policy-menu a:hover,
+.policy-menu a:focus-visible {
+  color: var(--md-sys-color-on-secondary-container);
+  background: var(--md-sys-color-secondary-container);
+  outline: none;
+}
+
+.category-chips md-filter-chip {
+  --md-filter-chip-container-shape: 999px;
+  --md-filter-chip-container-height: 40px;
+  transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+
+.category-chips md-filter-chip:hover {
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--md-sys-color-primary) 45%, var(--md-sys-color-outline-variant));
+  box-shadow: var(--app-shadow-1);
+}
+
+symbol-card {
+  display: block;
+  animation: premium-rise-in 320ms cubic-bezier(0.2, 0, 0, 1) both;
+  animation-delay: min(calc(var(--item-index, 0) * 24ms), 360ms);
+}
+
+.copy-button,
+.copy-button .copy-icon {
+  transition: transform 180ms cubic-bezier(0.2, 0, 0, 1), color 180ms ease, background 180ms ease;
+}
+
+.copy-button:hover .copy-icon { transform: scale(1.08); }
+
+.copy-button.is-copied {
+  color: var(--md-sys-color-on-primary-container);
+  background: var(--md-sys-color-primary-container);
+}
+
+.copy-button.is-copied .copy-icon {
+  animation: copied-pop 420ms cubic-bezier(0.2, 0, 0, 1) both;
+}
+
+md-snackbar {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 18px;
+  border-radius: 12px;
+  color: var(--md-sys-color-inverse-on-surface, var(--md-sys-color-on-primary));
+  background: var(--md-sys-color-inverse-surface, #303030);
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.md-snackbar-label {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+}
+
+.social-icons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.social-icons a {
+  color: var(--md-sys-color-on-surface-variant);
+  text-decoration: none;
+  animation: premium-rise-in 360ms cubic-bezier(0.2, 0, 0, 1) both;
+  animation-delay: min(calc(var(--item-index, 0) * 45ms), 360ms);
+}
+
+.social-icons md-icon-button {
+  color: inherit;
+  background: var(--md-sys-color-surface-container-low);
+  box-shadow: var(--app-shadow-1);
+  transition: transform 160ms ease, color 160ms ease, background 160ms ease, box-shadow 160ms ease;
+}
+
+.social-icons a:hover md-icon-button,
+.social-icons a:focus-visible md-icon-button {
+  color: var(--md-sys-color-on-primary-container);
+  background: var(--md-sys-color-primary-container);
+  box-shadow: var(--app-shadow-2);
+  transform: translateY(-2px);
+}
+
+.social-icons i,
+.social-icons .material-symbol {
+  font-size: 1.18rem;
+  line-height: 1;
+}
+
+.footer-policy-links,
+.footer-social-links { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 1ms !important;
+  }
+}
+
+@media (max-width: 680px) {
+  .theme-control { gap: 4px; }
+  .policy-menu { right: -4px; }
+}
+
+@media (max-width: 430px) {
+  .header-actions { gap: 6px; }
+  md-outlined-select.theme-menu { min-width: 104px; }
+  .policy-menu { min-width: min(232px, calc(100vw - 24px)); }
+  .social-icons { gap: 10px; }
+}
