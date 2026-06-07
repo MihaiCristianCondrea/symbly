@@ -1,8 +1,6 @@
-import '@material/web/icon/icon.js';
-import '@material/web/menu/menu.js';
-import '@material/web/menu/menu-item.js';
+import '@material/web/chips/chip-set.js';
+import '@material/web/chips/filter-chip.js';
 import '@material/web/snackbar/snackbar.js';
-import '@material/web/textfield/outlined-text-field.js';
 import type { CopySymbolUseCase } from '../domain/CopySymbolUseCase';
 import type { SearchSymbolsUseCase } from '../domain/SearchSymbolsUseCase';
 import { symbolFilterCategories, type SymbolFilterCategory } from '../domain/SymbolCategory';
@@ -24,14 +22,6 @@ const categoryIcons: Record<SymbolFilterCategory, string> = {
   All: 'apps',
 };
 
-interface MenuElement extends HTMLElement {
-  open: boolean;
-}
-
-interface TextFieldElement extends HTMLElement {
-  value: string;
-}
-
 export class SymbolFinderPage extends HTMLElement {
   private grid?: SymbolGrid;
   private snackbar?: HTMLElement & { labelText?: string; show?: () => void };
@@ -39,14 +29,6 @@ export class SymbolFinderPage extends HTMLElement {
   private copySymbolUseCase?: CopySymbolUseCase;
   private query = '';
   private category: SymbolFilterCategory = 'Popular';
-
-  private readonly handleDocumentKeydown = (event: KeyboardEvent): void => {
-    if (event.key !== 'Escape') {
-      return;
-    }
-
-    this.closeCategoryMenu();
-  };
 
   configure(searchSymbolsUseCase: SearchSymbolsUseCase, copySymbolUseCase: CopySymbolUseCase): void {
     this.searchSymbolsUseCase = searchSymbolsUseCase;
@@ -57,13 +39,8 @@ export class SymbolFinderPage extends HTMLElement {
   }
 
   connectedCallback(): void {
-    document.addEventListener('keydown', this.handleDocumentKeydown);
     this.render();
     void this.search();
-  }
-
-  disconnectedCallback(): void {
-    document.removeEventListener('keydown', this.handleDocumentKeydown);
   }
 
   private render(): void {
@@ -76,27 +53,10 @@ export class SymbolFinderPage extends HTMLElement {
         </div>
       </section>
       <section class="finder-area" aria-label="Search and copy symbols">
-        <div class="finder-controls">
-          <symbol-search-bar></symbol-search-bar>
-          <div class="text-field-anchor category-menu-anchor">
-            <md-outlined-text-field
-              id="categoryMenuButton"
-              class="category-menu-field"
-              label="Choose category"
-              readonly
-              aria-haspopup="listbox"
-              aria-expanded="false"
-              aria-controls="categoryMenu"
-              value="${this.escapeAttribute(this.category)}"
-            >
-              <md-icon slot="leading-icon">filter_list</md-icon>
-              <md-icon slot="trailing-icon">expand_more</md-icon>
-            </md-outlined-text-field>
-            <md-menu id="categoryMenu" anchor="categoryMenuButton" role="listbox" class="category-menu">
-              ${symbolFilterCategories.map((category) => this.renderCategoryItem(category)).join('')}
-            </md-menu>
-          </div>
-        </div>
+        <symbol-search-bar></symbol-search-bar>
+        <md-chip-set class="category-chips" aria-label="Filter symbol categories">
+          ${symbolFilterCategories.map((category) => this.renderChip(category)).join('')}
+        </md-chip-set>
         <div class="results-heading">
           <h2>${this.headingText()}</h2>
           <span class="results-count"></span>
@@ -113,7 +73,13 @@ export class SymbolFinderPage extends HTMLElement {
       void this.search();
     });
 
-    this.setupCategoryMenu();
+    this.querySelectorAll('md-filter-chip').forEach((chip) => {
+      chip.addEventListener('click', () => {
+        this.category = chip.getAttribute('data-category') as SymbolFilterCategory;
+        this.updateSelectedChip();
+        void this.search();
+      });
+    });
 
     this.addEventListener('copy-symbol', (event) => {
       const item = (event as CustomEvent<SymbolItem>).detail;
@@ -121,85 +87,25 @@ export class SymbolFinderPage extends HTMLElement {
     });
   }
 
-  private renderCategoryItem(category: SymbolFilterCategory): string {
-    const selected = category === this.category;
+  private renderChip(category: SymbolFilterCategory): string {
+    const selected = category === this.category ? 'selected' : '';
     return `
-      <md-menu-item
-        type="option"
+      <md-filter-chip
+        label="${this.escapeAttribute(category)}"
         data-category="${this.escapeAttribute(category)}"
-        aria-selected="${selected}"
-        ${selected ? 'selected' : ''}
+        ${selected}
       >
-        <md-icon slot="start">${categoryIcons[category]}</md-icon>
-        <div slot="headline">${this.escape(category)}</div>
-        ${selected ? '<md-icon slot="end">check</md-icon>' : ''}
-      </md-menu-item>
+        <span class="material-symbol category-chip-icon" aria-hidden="true">${categoryIcons[category]}</span>
+        <span>${this.escape(category)}</span>
+      </md-filter-chip>
     `;
   }
 
-  private setupCategoryMenu(): void {
-    const trigger = this.querySelector('#categoryMenuButton') as TextFieldElement | null;
-    const menu = this.querySelector('#categoryMenu') as MenuElement | null;
-
-    if (!trigger || !menu) {
-      return;
-    }
-
-    const setMenuOpen = (open: boolean) => {
-      menu.open = open;
-      trigger.setAttribute('aria-expanded', String(open));
-    };
-
-    const toggleMenu = () => setMenuOpen(!menu.open);
-
-    trigger.addEventListener('click', toggleMenu);
-    trigger.addEventListener('keydown', (event) => {
-      const opensMenu = event.key === 'Enter' || event.key === ' ' || event.key === 'ArrowDown';
-      if (!opensMenu) {
-        return;
-      }
-
-      event.preventDefault();
-      setMenuOpen(true);
-    });
-
-    menu.addEventListener('closed', () => {
-      trigger.setAttribute('aria-expanded', 'false');
-    });
-
-    this.querySelectorAll<HTMLElement>('md-menu-item[data-category]').forEach((item) => {
-      item.addEventListener('click', () => {
-        this.category = item.dataset.category as SymbolFilterCategory;
-        trigger.value = this.category;
-        setMenuOpen(false);
-        this.updateSelectedCategoryItems();
-        void this.search();
-      });
-    });
-  }
-
-  private closeCategoryMenu(): void {
-    const menu = this.querySelector('#categoryMenu') as MenuElement | null;
-    const trigger = this.querySelector('#categoryMenuButton') as HTMLElement | null;
-    if (!menu) {
-      return;
-    }
-
-    menu.open = false;
-    trigger?.setAttribute('aria-expanded', 'false');
-  }
-
-  private updateSelectedCategoryItems(): void {
-    this.querySelectorAll<HTMLElement>('md-menu-item[data-category]').forEach((item) => {
-      const selected = item.dataset.category === this.category;
-      item.toggleAttribute('selected', selected);
-      item.setAttribute('aria-selected', String(selected));
-      const endIcon = item.querySelector('[slot="end"]');
-      if (selected && !endIcon) {
-        item.insertAdjacentHTML('beforeend', '<md-icon slot="end">check</md-icon>');
-      } else if (!selected) {
-        endIcon?.remove();
-      }
+  private updateSelectedChip(): void {
+    this.querySelectorAll('md-filter-chip').forEach((chip) => {
+      const selected = chip.getAttribute('data-category') === this.category;
+      chip.toggleAttribute('selected', selected);
+      chip.setAttribute('aria-selected', String(selected));
     });
   }
 
