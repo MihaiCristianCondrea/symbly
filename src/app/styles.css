@@ -819,6 +819,12 @@ md-menu-item {
   outline: none;
 }
 
+md-menu-item [slot='headline'] {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 md-menu-item:hover,
 md-menu-item:focus-visible,
 md-menu-item[aria-checked='true'] {

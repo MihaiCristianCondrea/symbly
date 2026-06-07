@@ -10,6 +10,12 @@ interface HeaderLink {
   icon: string;
 }
 
+interface HeaderMenuElement extends HTMLElement {
+  open?: boolean;
+  show?: () => void;
+  close?: () => void;
+}
+
 const policyLinks: HeaderLink[] = [
   {
     label: 'Privacy Policy',
@@ -64,7 +70,11 @@ export class AppHeader extends HTMLElement {
             >
               <span class="material-symbol" aria-hidden="true">${themeIcons[mode]}</span>
             </md-icon-button>
-            <md-menu anchor="themeMenuButton" class="header-menu theme-menu" aria-label="Theme menu">
+            <md-menu
+              anchor="themeMenuButton"
+              class="header-menu theme-menu"
+              aria-label="Theme menu"
+            >
               ${themeModes.map((themeMode) => this.renderThemeItem(themeMode, mode)).join('')}
             </md-menu>
           </div>
@@ -78,7 +88,11 @@ export class AppHeader extends HTMLElement {
             >
               <span class="material-symbol" aria-hidden="true">more_vert</span>
             </md-icon-button>
-            <md-menu anchor="policyMenuButton" class="header-menu policy-menu" aria-label="Privacy Policy and Code of Conduct menu">
+            <md-menu
+              anchor="policyMenuButton"
+              class="header-menu policy-menu"
+              aria-label="Privacy Policy and Code of Conduct menu"
+            >
               ${policyLinks.map((link) => this.renderPolicyItem(link)).join('')}
             </md-menu>
           </div>
@@ -87,10 +101,12 @@ export class AppHeader extends HTMLElement {
     `;
 
     const themeButton = this.querySelector('#themeMenuButton') as HTMLElement;
-    const themeMenu = this.querySelector('md-menu.theme-menu') as HTMLElement & { open?: boolean };
+    const themeMenu = this.querySelector('md-menu.theme-menu') as HeaderMenuElement;
+    const policyMenu = this.querySelector('md-menu.policy-menu') as HeaderMenuElement;
     themeButton?.addEventListener('click', (event) => {
       event.stopPropagation();
-      themeMenu.open = !themeMenu.open;
+      this.setMenuOpen(themeMenu, !themeMenu.open);
+      this.setMenuOpen(policyMenu, false);
     });
 
     this.querySelectorAll<HTMLElement>('md-menu-item[data-theme-mode]').forEach((item) => {
@@ -102,15 +118,15 @@ export class AppHeader extends HTMLElement {
     });
 
     const policyButton = this.querySelector('#policyMenuButton') as HTMLElement;
-    const policyMenu = this.querySelector('md-menu.policy-menu') as HTMLElement & { open?: boolean };
     policyButton?.addEventListener('click', (event) => {
       event.stopPropagation();
-      policyMenu.open = !policyMenu.open;
+      this.setMenuOpen(policyMenu, !policyMenu.open);
+      this.setMenuOpen(themeMenu, false);
     });
 
-    this.querySelectorAll<HTMLElement>('md-menu-item[data-href]').forEach((item) => {
+    this.querySelectorAll<HTMLElement>('md-menu-item[href]').forEach((item) => {
       item.addEventListener('click', () => {
-        const href = item.dataset.href ?? '';
+        const href = item.getAttribute('href') ?? '';
         if (href) {
           window.open(href, '_blank', 'noopener,noreferrer');
         }
@@ -118,22 +134,38 @@ export class AppHeader extends HTMLElement {
     });
   }
 
+  private setMenuOpen(menu: HeaderMenuElement | null, nextOpen: boolean): void {
+    if (!menu) {
+      return;
+    }
+
+    if (nextOpen) {
+      menu.show?.();
+    } else {
+      menu.close?.();
+    }
+
+    if (!menu.show || !menu.close) {
+      menu.open = nextOpen;
+    }
+  }
+
   private renderThemeItem(themeMode: ThemeMode, selectedMode: ThemeMode): string {
     const selected = themeMode === selectedMode;
     return `
-      <md-menu-item data-theme-mode="${themeMode}" aria-checked="${selected}">
-        <span class="material-symbol menu-item-icon" aria-hidden="true">${themeIcons[themeMode]}</span>
-        <span>${this.label(themeMode)}</span>
-        ${selected ? '<span class="material-symbol menu-item-check" aria-hidden="true">check</span>' : ''}
+      <md-menu-item type="menuitemradio" data-theme-mode="${themeMode}" aria-checked="${selected}">
+        <span slot="start" class="material-symbol menu-item-icon" aria-hidden="true">${themeIcons[themeMode]}</span>
+        <div slot="headline">${this.label(themeMode)}</div>
+        ${selected ? '<span slot="end" class="material-symbol menu-item-check" aria-hidden="true">check</span>' : ''}
       </md-menu-item>
     `;
   }
 
   private renderPolicyItem(link: HeaderLink): string {
     return `
-      <md-menu-item data-href="${link.href}">
-        <span class="material-symbol menu-item-icon" aria-hidden="true">${link.icon}</span>
-        <span>${link.label}</span>
+      <md-menu-item href="${link.href}" target="_blank">
+        <span slot="start" class="material-symbol menu-item-icon" aria-hidden="true">${link.icon}</span>
+        <div slot="headline">${link.label}</div>
       </md-menu-item>
     `;
   }
