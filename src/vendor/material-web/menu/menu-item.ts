@@ -1,11 +1,25 @@
+const defaultMenuItemType = 'menuitem';
+
 class MdMenuItem extends HTMLElement {
+  static get observedAttributes(): string[] { return ['type']; }
+
   connectedCallback(): void {
-    if (!this.hasAttribute('role')) {
-      this.setAttribute('role', 'menuitem');
-    }
+    this.syncRole();
 
     if (!this.hasAttribute('tabindex')) {
       this.tabIndex = -1;
+    }
+  }
+
+  attributeChangedCallback(): void {
+    if (this.isConnected) {
+      this.syncRole();
+    }
+  }
+
+  private syncRole(): void {
+    if (!this.hasAttribute('role')) {
+      this.setAttribute('role', this.getAttribute('type') ?? defaultMenuItemType);
     }
   }
 }
