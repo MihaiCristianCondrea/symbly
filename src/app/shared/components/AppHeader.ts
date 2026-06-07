@@ -1,4 +1,3 @@
-import '@material/web/iconbutton/icon-button.js';
 import '@material/web/select/outlined-select.js';
 import '@material/web/select/select-option.js';
 import type { ThemeController } from '../../theme/ThemeController';
@@ -26,7 +25,6 @@ export class AppHeader extends HTMLElement {
           <span class="brand-mark">S</span>
           <span class="brand-copy">
             <strong>Symbly</strong>
-            <small>Search any symbol</small>
           </span>
         </a>
         <div class="header-actions">
@@ -38,9 +36,6 @@ export class AppHeader extends HTMLElement {
               </md-select-option>
             `).join('')}
           </md-outlined-select>
-          <md-icon-button aria-label="More options">
-            <span class="material-symbol" aria-hidden="true">more_vert</span>
-          </md-icon-button>
         </div>
       </header>
     `;

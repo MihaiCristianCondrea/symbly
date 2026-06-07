@@ -17,8 +17,8 @@
   <circle cx="100" cy="520" r="260" fill="#F3E39B" opacity="0.58" />
   <rect x="92" y="82" width="1016" height="466" rx="56" fill="#FFFFFF" opacity="0.88" />
   <rect x="390" y="112" width="132" height="132" rx="34" fill="url(#mark)" />
-  <text x="456" y="201" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="78" font-weight="700" fill="#FFFFFF">§</text>
-  <text x="600" y="332" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="82" font-weight="800" fill="#191C18">Symbly</text>
-  <text x="600" y="402" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="40" font-weight="700" fill="#146C43">Search Any Symbol</text>
+  <text x="456" y="201" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="78" font-weight="600" fill="#FFFFFF">§</text>
+  <text x="600" y="332" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="82" font-weight="600" fill="#191C18">Symbly</text>
+  <text x="600" y="402" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="40" font-weight="600" fill="#146C43">Search Any Symbol</text>
   <text x="600" y="466" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="30" fill="#5B6257">€, $, £, ¥, ©, ™, ✓, arrows, math, punctuation</text>
 </svg>
