@@ -11,9 +11,7 @@ interface HeaderLink {
 }
 
 interface HeaderMenuElement extends HTMLElement {
-  open?: boolean;
-  show?: () => void;
-  close?: () => void;
+  open: boolean;
 }
 
 const policyLinks: HeaderLink[] = [
@@ -38,6 +36,14 @@ const themeIcons: Record<ThemeMode, string> = {
 export class AppHeader extends HTMLElement {
   private themeController?: ThemeController;
 
+  private readonly handleDocumentKeydown = (event: KeyboardEvent): void => {
+    if (event.key !== 'Escape') {
+      return;
+    }
+
+    this.closeMenus();
+  };
+
   configure(themeController: ThemeController): void {
     this.themeController = themeController;
     if (this.isConnected) {
@@ -46,7 +52,12 @@ export class AppHeader extends HTMLElement {
   }
 
   connectedCallback(): void {
+    document.addEventListener('keydown', this.handleDocumentKeydown);
     this.render();
+  }
+
+  disconnectedCallback(): void {
+    document.removeEventListener('keydown', this.handleDocumentKeydown);
   }
 
   private render(): void {
@@ -66,10 +77,12 @@ export class AppHeader extends HTMLElement {
               aria-label="Choose theme mode: ${this.label(mode)}"
               aria-haspopup="menu"
               aria-expanded="false"
+              aria-controls="themeMenu"
             >
               <span class="material-symbol" aria-hidden="true">${themeIcons[mode]}</span>
             </md-icon-button>
             <md-menu
+              id="themeMenu"
               anchor="themeMenuButton"
               class="theme-menu"
               aria-label="Theme menu"
@@ -87,10 +100,12 @@ export class AppHeader extends HTMLElement {
               aria-label="Open Privacy Policy and Code of Conduct menu"
               aria-haspopup="menu"
               aria-expanded="false"
+              aria-controls="policyMenu"
             >
               <span class="material-symbol" aria-hidden="true">more_vert</span>
             </md-icon-button>
             <md-menu
+              id="policyMenu"
               anchor="policyMenuButton"
               class="policy-menu"
               aria-label="Privacy Policy and Code of Conduct menu"
@@ -117,6 +132,7 @@ export class AppHeader extends HTMLElement {
     this.querySelectorAll<HTMLElement>('md-menu-item[data-theme-mode]').forEach((item) => {
       item.addEventListener('click', () => {
         const nextMode = (item.dataset.themeMode ?? 'system') as ThemeMode;
+        this.closeMenus();
         this.themeController?.setMode(nextMode);
         this.render();
       });
@@ -126,6 +142,7 @@ export class AppHeader extends HTMLElement {
       item.addEventListener('click', () => {
         const href = item.getAttribute('href') ?? '';
         if (href) {
+          this.closeMenus();
           window.open(href, '_blank', 'noopener,noreferrer');
         }
       });
@@ -141,31 +158,33 @@ export class AppHeader extends HTMLElement {
       return;
     }
 
-    const syncButtonState = () => {
-      const isOpen = Boolean(menu.open);
+    const setButtonState = (isOpen: boolean) => {
       button.setAttribute('aria-expanded', String(isOpen));
       button.toggleAttribute('data-menu-open', isOpen);
     };
 
-    menu.addEventListener('opened', syncButtonState);
-    menu.addEventListener('closed', syncButtonState);
-    syncButtonState();
+    menu.addEventListener('closed', () => setButtonState(false));
+    setButtonState(menu.open);
 
-    button.addEventListener('click', (event) => {
-      event.stopPropagation();
-      this.setMenuOpen(menu, !menu.open);
+    button.addEventListener('click', () => {
+      const shouldOpen = !menu.open;
+
       this.setMenuOpen(siblingMenu, false);
+      this.setMenuOpen(menu, shouldOpen);
+      setButtonState(shouldOpen);
     });
 
     button.addEventListener('keydown', (event) => {
-      const opensMenu = ['ArrowDown', 'Enter', ' '].includes(event.key);
+      const opensMenu = ['Enter', ' ', 'ArrowDown'].includes(event.key);
       if (!opensMenu) {
         return;
       }
 
       event.preventDefault();
-      this.setMenuOpen(menu, true);
+
       this.setMenuOpen(siblingMenu, false);
+      this.setMenuOpen(menu, true);
+      setButtonState(true);
     });
   }
 
@@ -174,15 +193,17 @@ export class AppHeader extends HTMLElement {
       return;
     }
 
-    if (nextOpen) {
-      menu.show?.();
-    } else {
-      menu.close?.();
-    }
+    menu.open = nextOpen;
 
-    if (!menu.show || !menu.close) {
-      menu.open = nextOpen;
-    }
+    const trigger = this.querySelector<HTMLElement>(`#${menu.getAttribute('anchor') ?? ''}`);
+    trigger?.setAttribute('aria-expanded', String(nextOpen));
+    trigger?.toggleAttribute('data-menu-open', nextOpen);
+  }
+
+  private closeMenus(): void {
+    this.querySelectorAll<HeaderMenuElement>('md-menu').forEach((menu) => {
+      this.setMenuOpen(menu, false);
+    });
   }
 
   private renderThemeItem(themeMode: ThemeMode, selectedMode: ThemeMode): string {
