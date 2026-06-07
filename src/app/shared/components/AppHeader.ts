@@ -1,24 +1,33 @@
 import '@material/web/iconbutton/icon-button.js';
-import '@material/web/select/outlined-select.js';
-import '@material/web/select/select-option.js';
+import '@material/web/menu/menu.js';
+import '@material/web/menu/menu-item.js';
 import type { ThemeController } from '../../theme/ThemeController';
 import { themeModes, type ThemeMode } from '../../theme/ThemeMode';
 
 interface HeaderLink {
   label: string;
   href: string;
+  icon: string;
 }
 
 const policyLinks: HeaderLink[] = [
   {
     label: 'Privacy Policy',
     href: 'https://mihaicristiancondrea.github.io/profile/#privacy-policy',
+    icon: 'privacy_tip',
   },
   {
     label: 'Code of Conduct',
     href: 'https://mihaicristiancondrea.github.io/profile/#code-of-conduct',
+    icon: 'verified_user',
   },
 ];
+
+const themeIcons: Record<ThemeMode, string> = {
+  system: 'brightness_auto',
+  light: 'light_mode',
+  dark: 'dark_mode',
+};
 
 export class AppHeader extends HTMLElement {
   private themeController?: ThemeController;
@@ -45,45 +54,87 @@ export class AppHeader extends HTMLElement {
           </span>
         </a>
         <div class="header-actions">
-          <div class="theme-control" aria-label="Theme controls">
-            <span class="material-symbol theme-icon" aria-hidden="true">${mode === 'dark' ? 'dark_mode' : mode === 'light' ? 'light_mode' : 'brightness_auto'}</span>
-            <md-outlined-select class="theme-menu" aria-label="Choose theme mode" value="${mode}">
-              ${themeModes.map((themeMode) => `
-                <md-select-option value="${themeMode}" ${themeMode === mode ? 'selected' : ''}>
-                  <div slot="headline">${this.label(themeMode)}</div>
-                </md-select-option>
-              `).join('')}
-            </md-outlined-select>
+          <div class="menu-control theme-control">
+            <md-icon-button
+              id="themeMenuButton"
+              class="header-menu-button"
+              aria-label="Choose theme mode: ${this.label(mode)}"
+              aria-haspopup="menu"
+              aria-expanded="false"
+            >
+              <span class="material-symbol" aria-hidden="true">${themeIcons[mode]}</span>
+            </md-icon-button>
+            <md-menu anchor="themeMenuButton" class="header-menu theme-menu" aria-label="Theme menu">
+              ${themeModes.map((themeMode) => this.renderThemeItem(themeMode, mode)).join('')}
+            </md-menu>
           </div>
-          <md-outlined-select class="policy-menu" aria-label="Open site links" placeholder="Links" value="">
-            ${policyLinks.map((link) => this.renderPolicyOption(link)).join('')}
-          </md-outlined-select>
+          <div class="menu-control policy-control">
+            <md-icon-button
+              id="policyMenuButton"
+              class="header-menu-button"
+              aria-label="Open Privacy Policy and Code of Conduct menu"
+              aria-haspopup="menu"
+              aria-expanded="false"
+            >
+              <span class="material-symbol" aria-hidden="true">more_vert</span>
+            </md-icon-button>
+            <md-menu anchor="policyMenuButton" class="header-menu policy-menu" aria-label="Privacy Policy and Code of Conduct menu">
+              ${policyLinks.map((link) => this.renderPolicyItem(link)).join('')}
+            </md-menu>
+          </div>
         </div>
       </header>
     `;
 
-    const select = this.querySelector('md-outlined-select') as HTMLElement & { value?: ThemeMode };
-    select?.addEventListener('change', () => {
-      const nextMode = (select.value ?? select.getAttribute('value') ?? 'system') as ThemeMode;
-      this.themeController?.setMode(nextMode);
-      this.render();
+    const themeButton = this.querySelector('#themeMenuButton') as HTMLElement;
+    const themeMenu = this.querySelector('md-menu.theme-menu') as HTMLElement & { open?: boolean };
+    themeButton?.addEventListener('click', (event) => {
+      event.stopPropagation();
+      themeMenu.open = !themeMenu.open;
     });
 
-    const policySelect = this.querySelector('md-outlined-select.policy-menu') as HTMLElement & { value?: string };
-    policySelect?.addEventListener('change', () => {
-      const href = policySelect.value ?? '';
-      if (href) {
-        window.open(href, '_blank', 'noopener,noreferrer');
-        policySelect.value = '';
-      }
+    this.querySelectorAll<HTMLElement>('md-menu-item[data-theme-mode]').forEach((item) => {
+      item.addEventListener('click', () => {
+        const nextMode = (item.dataset.themeMode ?? 'system') as ThemeMode;
+        this.themeController?.setMode(nextMode);
+        this.render();
+      });
+    });
+
+    const policyButton = this.querySelector('#policyMenuButton') as HTMLElement;
+    const policyMenu = this.querySelector('md-menu.policy-menu') as HTMLElement & { open?: boolean };
+    policyButton?.addEventListener('click', (event) => {
+      event.stopPropagation();
+      policyMenu.open = !policyMenu.open;
+    });
+
+    this.querySelectorAll<HTMLElement>('md-menu-item[data-href]').forEach((item) => {
+      item.addEventListener('click', () => {
+        const href = item.dataset.href ?? '';
+        if (href) {
+          window.open(href, '_blank', 'noopener,noreferrer');
+        }
+      });
     });
   }
 
-  private renderPolicyOption(link: HeaderLink): string {
+  private renderThemeItem(themeMode: ThemeMode, selectedMode: ThemeMode): string {
+    const selected = themeMode === selectedMode;
     return `
-      <md-select-option value="${link.href}">
-        <div slot="headline">${link.label}</div>
-      </md-select-option>
+      <md-menu-item data-theme-mode="${themeMode}" aria-checked="${selected}">
+        <span class="material-symbol menu-item-icon" aria-hidden="true">${themeIcons[themeMode]}</span>
+        <span>${this.label(themeMode)}</span>
+        ${selected ? '<span class="material-symbol menu-item-check" aria-hidden="true">check</span>' : ''}
+      </md-menu-item>
+    `;
+  }
+
+  private renderPolicyItem(link: HeaderLink): string {
+    return `
+      <md-menu-item data-href="${link.href}">
+        <span class="material-symbol menu-item-icon" aria-hidden="true">${link.icon}</span>
+        <span>${link.label}</span>
+      </md-menu-item>
     `;
   }
 
