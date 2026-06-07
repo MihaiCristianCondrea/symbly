@@ -743,16 +743,6 @@ md-snackbar[open] {
   100% { transform: scale(1); opacity: 1; }
 }
 
-@keyframes menu-enter {
-  from {
-    opacity: 0;
-    transform: translateY(-8px) scale(0.96);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
 
 .hero-content,
 .search-field-wrap,
@@ -773,34 +763,6 @@ md-snackbar[open] {
   position: relative;
   display: inline-flex;
   align-items: center;
-}
-
-.header-menu-button {
-  color: var(--md-sys-color-on-surface-variant);
-  background: var(--md-sys-color-surface-container-low);
-}
-
-.header-menu-button:hover,
-.header-menu-button:focus-visible,
-.header-menu-button[aria-expanded='true'] {
-  color: var(--md-sys-color-on-primary-container);
-  background: var(--md-sys-color-primary-container);
-  outline: none;
-}
-
-md-menu.header-menu {
-  --md-menu-container-color: var(--md-sys-color-surface-container);
-  --md-menu-container-shape: 4px;
-  --md-menu-item-selected-container-color: var(--md-sys-color-secondary-container);
-  min-width: 184px;
-}
-
-md-menu.policy-menu { min-width: 236px; }
-
-.menu-item-icon,
-.menu-item-check {
-  color: currentColor;
-  font-size: 20px;
 }
 
 
@@ -898,9 +860,6 @@ md-snackbar {
   }
 }
 
-@media (max-width: 680px) {
-  .menu-control { gap: 4px; }
-}
 
 @media (max-width: 430px) {
   .header-actions { gap: 6px; }

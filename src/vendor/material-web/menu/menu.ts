@@ -3,66 +3,6 @@ const viewportPadding = 8;
 
 class MdMenu extends HTMLElement {
   private documentClickListening = false;
-  private readonly shadow = this.attachShadow({ mode: 'open' });
-
-  constructor() {
-    super();
-    this.shadow.innerHTML = `
-      <style>
-        :host {
-          --md-menu-container-color: var(--md-sys-color-surface-container, #f3edf7);
-          --md-menu-container-shape: 4px;
-          --md-menu-container-elevation-shadow: var(--app-shadow-2, 0 3px 6px rgba(0, 0, 0, 0.16), 0 8px 16px rgba(0, 0, 0, 0.12));
-          --md-menu-item-selected-container-color: var(--md-sys-color-secondary-container, #e8def8);
-
-          position: fixed;
-          inset: auto auto auto auto;
-          z-index: 30;
-          display: block;
-          min-width: 112px;
-          color: var(--md-sys-color-on-surface, #1d1b20);
-          transform-origin: var(--_md-menu-transform-origin, top left);
-        }
-
-        :host([hidden]) {
-          display: none;
-        }
-
-        .surface {
-          box-sizing: border-box;
-          min-width: inherit;
-          max-width: min(320px, calc(100vw - 16px));
-          max-height: calc(100vh - 16px);
-          padding: 8px 0;
-          overflow: auto;
-          color: inherit;
-          background: var(--md-menu-container-color);
-          border-radius: var(--md-menu-container-shape);
-          box-shadow: var(--md-menu-container-elevation-shadow);
-          outline: none;
-        }
-
-        :host([open]) .surface {
-          animation: md-menu-enter 160ms cubic-bezier(0.2, 0, 0, 1) both;
-        }
-
-        @keyframes md-menu-enter {
-          from {
-            opacity: 0;
-            transform: scale(0.96) translateY(-4px);
-          }
-
-          to {
-            opacity: 1;
-            transform: scale(1) translateY(0);
-          }
-        }
-      </style>
-      <div class="surface" part="surface">
-        <slot></slot>
-      </div>
-    `;
-  }
 
   connectedCallback(): void {
     this.setAttribute('role', this.getAttribute('role') ?? 'menu');
@@ -128,9 +68,9 @@ class MdMenu extends HTMLElement {
     const maxTop = Math.max(viewportPadding, window.innerHeight - menuHeight - viewportPadding);
     const top = Math.min(Math.max(desiredTop, minTop), maxTop);
 
+    this.style.position = 'fixed';
     this.style.left = `${Math.round(left)}px`;
     this.style.top = `${Math.round(top)}px`;
-    this.style.setProperty('--_md-menu-transform-origin', placeAbove ? 'bottom right' : 'top right');
   };
 
   private handleDocumentClick = (event: MouseEvent): void => {
@@ -183,6 +123,11 @@ class MdMenu extends HTMLElement {
         this.style.visibility = '';
         this.getMenuItems()[0]?.focus();
       });
+    } else {
+      this.style.left = '';
+      this.style.top = '';
+      this.style.position = '';
+      this.style.visibility = '';
     }
   }
 
@@ -192,8 +137,7 @@ class MdMenu extends HTMLElement {
       return;
     }
 
-    const active = document.activeElement;
-    const currentIndex = active ? items.indexOf(active as HTMLElement) : -1;
+    const currentIndex = items.findIndex((item) => item === document.activeElement);
     const nextIndex = currentIndex === -1
       ? (direction === 1 ? 0 : items.length - 1)
       : (currentIndex + direction + items.length) % items.length;
