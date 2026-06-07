@@ -9,6 +9,19 @@ import type { SymbolGrid } from './SymbolGrid';
 import './SymbolGrid';
 import './SymbolSearchBar';
 
+const categoryIcons: Record<SymbolFilterCategory, string> = {
+  Popular: 'stars',
+  Currency: 'payments',
+  Arrows: 'arrow_right_alt',
+  Math: 'functions',
+  Punctuation: 'format_quote',
+  Legal: 'gavel',
+  Checkmarks: 'check_circle',
+  Greek: 'language',
+  Developer: 'code_blocks',
+  All: 'apps',
+};
+
 export class SymbolFinderPage extends HTMLElement {
   private grid?: SymbolGrid;
   private snackbar?: HTMLElement & { labelText?: string; show?: () => void };
@@ -76,7 +89,12 @@ export class SymbolFinderPage extends HTMLElement {
 
   private renderChip(category: SymbolFilterCategory): string {
     const selected = category === this.category ? 'selected' : '';
-    return `<md-filter-chip label="${category}" data-category="${category}" ${selected}></md-filter-chip>`;
+    return `
+      <md-filter-chip label="${category}" data-category="${category}" ${selected}>
+        <span class="material-symbol category-chip-icon" aria-hidden="true">${categoryIcons[category]}</span>
+        <span>${category}</span>
+      </md-filter-chip>
+    `;
   }
 
   private updateSelectedChip(): void {
