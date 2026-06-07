@@ -765,6 +765,46 @@ md-snackbar[open] {
   align-items: center;
 }
 
+.menu-control md-icon-button {
+  transition: color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+
+.menu-control md-icon-button[data-menu-open] {
+  color: var(--md-sys-color-on-primary-container);
+  background: var(--md-sys-color-primary-container);
+  transform: translateY(-1px);
+}
+
+.menu-control md-menu {
+  min-width: 220px;
+  max-width: min(300px, calc(100vw - 32px));
+  padding: 8px;
+  --md-menu-container-color: var(--md-sys-color-surface-container-lowest);
+  --md-menu-container-shape: 18px;
+  --md-menu-item-container-color: transparent;
+  --md-menu-item-selected-container-color: var(--md-sys-color-secondary-container);
+  --md-list-container-color: transparent;
+  filter: drop-shadow(0 18px 36px rgba(18, 27, 19, 0.18));
+}
+
+.menu-control md-menu-item {
+  margin: 2px 0;
+  border-radius: 14px;
+  color: var(--md-sys-color-on-surface);
+  --md-list-item-leading-icon-color: var(--md-sys-color-on-surface-variant);
+  --md-list-item-trailing-icon-color: var(--md-sys-color-primary);
+  --md-list-item-label-text-font: var(--md-ref-typeface-plain);
+  --md-list-item-label-text-weight: 600;
+}
+
+.menu-control md-menu-item[selected] {
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+.menu-control md-menu-item::part(focus-ring) {
+  border-radius: 14px;
+}
+
 
 symbol-card {
   display: block;
