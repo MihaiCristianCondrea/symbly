@@ -156,12 +156,25 @@ page-container {
   font-weight: 800;
 }
 
-.hero-copy {
-  max-width: 680px;
+.hero-copy,
+.seo-summary p {
+  max-width: 720px;
   margin: 16px auto 0;
   color: var(--md-sys-color-outline);
   font-size: 1.05rem;
   line-height: 1.7;
+}
+
+.seo-summary {
+  max-width: 820px;
+  margin: 0 auto 24px;
+  text-align: center;
+}
+
+.seo-summary h2 {
+  margin: 0;
+  color: var(--md-sys-color-on-background);
+  font-size: clamp(1.3rem, 3vw, 2rem);
 }
 
 .finder-card,

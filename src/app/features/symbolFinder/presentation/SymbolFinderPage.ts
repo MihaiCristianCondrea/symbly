@@ -31,7 +31,11 @@ export class SymbolFinderPage extends HTMLElement {
         <p class="eyebrow">Symbol finder</p>
         <h1 id="hero-title">Symbly</h1>
         <p class="tagline">Search any symbol</p>
-        <p class="hero-copy">Find common currency marks, arrows, math operators, punctuation, legal marks, Greek letters, and developer symbols in seconds.</p>
+        <p class="hero-copy">Find and copy symbols in seconds, from currency signs and arrows to math operators, punctuation, legal marks, Greek letters, and developer symbols.</p>
+      </section>
+      <section class="seo-summary" aria-labelledby="seo-summary-title">
+        <h2 id="seo-summary-title">Quick access to common symbols</h2>
+        <p>Use Symbly to search for the euro symbol, dollar symbol, pound symbol, yen symbol, copyright symbol, trademark symbol, checkmark symbol, arrow symbols, math symbols, and other copy symbols without digging through character maps.</p>
       </section>
       <section class="finder-card" aria-label="Search and copy symbols">
         <symbol-search-bar></symbol-search-bar>
