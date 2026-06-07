@@ -1,3 +1,4 @@
+import '@material/web/icon/icon.js';
 import '@material/web/iconbutton/icon-button.js';
 import type { SymbolItem } from '../domain/SymbolItem';
 
@@ -34,7 +35,7 @@ export class SymbolCard extends HTMLElement {
         <div class="symbol-card-top">
           <span class="symbol-glyph">${this.escape(this.symbolItem.symbol)}</span>
           <md-icon-button class="copy-button ${this.copied ? 'is-copied' : ''}" aria-label="${this.copied ? 'Copied' : `Copy ${this.escape(this.symbolItem.symbol)}`}">
-            <span class="material-symbol copy-icon" aria-hidden="true">${this.copied ? 'check' : 'content_copy'}</span>
+            <md-icon class="copy-icon" aria-hidden="true">${this.copied ? 'check' : 'content_copy'}</md-icon>
           </md-icon-button>
         </div>
         <div class="symbol-meta">

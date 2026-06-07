@@ -1,3 +1,5 @@
+import '@material/web/button/filled-tonal-button.js';
+import '@material/web/icon/icon.js';
 import '@material/web/iconbutton/icon-button.js';
 import '@material/web/menu/menu.js';
 import '@material/web/menu/menu-item.js';
@@ -72,15 +74,18 @@ export class AppHeader extends HTMLElement {
         </a>
         <div class="header-actions">
           <div class="menu-control theme-control">
-            <md-icon-button
+            <md-filled-tonal-button
               id="themeMenuButton"
+              class="theme-menu-button"
+              trailing-icon
               aria-label="Choose theme mode: ${this.label(mode)}"
               aria-haspopup="menu"
               aria-expanded="false"
               aria-controls="themeMenu"
             >
-              <span class="material-symbol" aria-hidden="true">${themeIcons[mode]}</span>
-            </md-icon-button>
+              ${this.label(mode)}
+              <md-icon slot="icon">expand_more</md-icon>
+            </md-filled-tonal-button>
             <md-menu
               id="themeMenu"
               anchor="themeMenuButton"
@@ -102,7 +107,7 @@ export class AppHeader extends HTMLElement {
               aria-expanded="false"
               aria-controls="policyMenu"
             >
-              <span class="material-symbol" aria-hidden="true">more_vert</span>
+              <md-icon>more_vert</md-icon>
             </md-icon-button>
             <md-menu
               id="policyMenu"
@@ -210,9 +215,9 @@ export class AppHeader extends HTMLElement {
     const selected = themeMode === selectedMode;
     return `
       <md-menu-item type="menuitemradio" data-theme-mode="${themeMode}" aria-checked="${selected}" ${selected ? 'selected' : ''}>
-        <span slot="start" class="material-symbol" aria-hidden="true">${themeIcons[themeMode]}</span>
+        <md-icon slot="start">${themeIcons[themeMode]}</md-icon>
         <div slot="headline">${this.label(themeMode)}</div>
-        ${selected ? '<span slot="end" class="material-symbol" aria-hidden="true">check</span>' : ''}
+        ${selected ? '<md-icon slot="end">check</md-icon>' : ''}
       </md-menu-item>
     `;
   }
@@ -220,7 +225,7 @@ export class AppHeader extends HTMLElement {
   private renderPolicyItem(link: HeaderLink): string {
     return `
       <md-menu-item href="${link.href}" target="_blank">
-        <span slot="start" class="material-symbol" aria-hidden="true">${link.icon}</span>
+        <md-icon slot="start">${link.icon}</md-icon>
         <div slot="headline">${link.label}</div>
       </md-menu-item>
     `;

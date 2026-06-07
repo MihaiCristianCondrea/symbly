@@ -25,6 +25,8 @@ class MdOutlinedTextField extends HTMLElement {
     input.type = this.getAttribute('type') ?? 'text';
     input.placeholder = this.getAttribute('placeholder') ?? '';
     input.autocomplete = this.getAttribute('autocomplete') ?? 'off';
+    input.readOnly = this.hasAttribute('readonly');
+    input.disabled = this.hasAttribute('disabled');
     input.setAttribute('aria-label', this.getAttribute('aria-label') ?? this.getAttribute('label') ?? 'Text field');
     input.value = this.getAttribute('value') ?? '';
     this.textContent = '';

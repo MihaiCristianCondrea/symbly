@@ -1,3 +1,4 @@
+import '@material/web/icon/icon.js';
 import '@material/web/iconbutton/icon-button.js';
 
 interface SocialLink {
@@ -57,9 +58,7 @@ export class AppFooter extends HTMLElement {
     return `
       <a href="${link.href}" ${link.href.startsWith('mailto:') ? '' : 'target="_blank" rel="noopener noreferrer"'} aria-label="${link.label}" title="${this.linkTitle(link.label)}" style="--item-index: ${index};">
         <md-icon-button value="">
-          <md-icon aria-hidden="true">
-            <span class="material-symbol">${link.icon}</span>
-          </md-icon>
+          <md-icon aria-hidden="true">${link.icon}</md-icon>
         </md-icon-button>
       </a>
     `;
