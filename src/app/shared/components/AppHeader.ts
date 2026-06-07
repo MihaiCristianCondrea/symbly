@@ -7,25 +7,21 @@ import { themeModes, type ThemeMode } from '../../theme/ThemeMode';
 interface HeaderLink {
   label: string;
   href: string;
-  icon: string;
 }
 
 const policyLinks: HeaderLink[] = [
   {
     label: 'Privacy Policy',
     href: 'https://mihaicristiancondrea.github.io/profile/#privacy-policy',
-    icon: 'policy',
   },
   {
     label: 'Code of Conduct',
     href: 'https://mihaicristiancondrea.github.io/profile/#code-of-conduct',
-    icon: 'verified_user',
   },
 ];
 
 export class AppHeader extends HTMLElement {
   private themeController?: ThemeController;
-  private outsideClickController?: AbortController;
 
   configure(themeController: ThemeController): void {
     this.themeController = themeController;
@@ -38,12 +34,7 @@ export class AppHeader extends HTMLElement {
     this.render();
   }
 
-  disconnectedCallback(): void {
-    this.outsideClickController?.abort();
-  }
-
   private render(): void {
-    this.outsideClickController?.abort();
     const mode = this.themeController?.getMode() ?? 'system';
     this.innerHTML = `
       <header class="app-header">
@@ -64,14 +55,9 @@ export class AppHeader extends HTMLElement {
               `).join('')}
             </md-outlined-select>
           </div>
-          <div class="policy-menu-wrap">
-            <md-icon-button class="policy-menu-button" aria-label="Open site links" aria-haspopup="menu" aria-expanded="false">
-              <span class="material-symbol" aria-hidden="true">more_vert</span>
-            </md-icon-button>
-            <nav class="policy-menu" aria-label="Site links" role="menu" hidden>
-              ${policyLinks.map((link) => this.renderPolicyLink(link)).join('')}
-            </nav>
-          </div>
+          <md-outlined-select class="policy-menu" aria-label="Open site links" placeholder="Links" value="">
+            ${policyLinks.map((link) => this.renderPolicyOption(link)).join('')}
+          </md-outlined-select>
         </div>
       </header>
     `;
@@ -83,40 +69,22 @@ export class AppHeader extends HTMLElement {
       this.render();
     });
 
-    const menuButton = this.querySelector('.policy-menu-button') as HTMLElement | null;
-    const menu = this.querySelector('.policy-menu') as HTMLElement | null;
-    menuButton?.addEventListener('click', (event) => {
-      event.stopPropagation();
-      const open = menu?.hasAttribute('hidden') ?? true;
-      this.setPolicyMenuOpen(open);
-    });
-
-    menu?.querySelectorAll('a').forEach((link) => {
-      link.addEventListener('click', () => this.setPolicyMenuOpen(false));
-    });
-
-    this.outsideClickController = new AbortController();
-    document.addEventListener('click', (event) => {
-      if (!this.contains(event.target as Node)) {
-        this.setPolicyMenuOpen(false);
+    const policySelect = this.querySelector('md-outlined-select.policy-menu') as HTMLElement & { value?: string };
+    policySelect?.addEventListener('change', () => {
+      const href = policySelect.value ?? '';
+      if (href) {
+        window.open(href, '_blank', 'noopener,noreferrer');
+        policySelect.value = '';
       }
-    }, { signal: this.outsideClickController.signal });
+    });
   }
 
-  private renderPolicyLink(link: HeaderLink): string {
+  private renderPolicyOption(link: HeaderLink): string {
     return `
-      <a href="${link.href}" target="_blank" rel="noopener noreferrer" role="menuitem">
-        <span class="material-symbol" aria-hidden="true">${link.icon}</span>
-        <span>${link.label}</span>
-      </a>
+      <md-select-option value="${link.href}">
+        <div slot="headline">${link.label}</div>
+      </md-select-option>
     `;
-  }
-
-  private setPolicyMenuOpen(open: boolean): void {
-    const menuButton = this.querySelector('.policy-menu-button') as HTMLElement | null;
-    const menu = this.querySelector('.policy-menu') as HTMLElement | null;
-    menu?.toggleAttribute('hidden', !open);
-    menuButton?.setAttribute('aria-expanded', open ? 'true' : 'false');
   }
 
   private label(mode: ThemeMode): string {

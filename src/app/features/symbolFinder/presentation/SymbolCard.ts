@@ -5,11 +5,13 @@ export class SymbolCard extends HTMLElement {
   private symbolItem?: SymbolItem;
   private copied = false;
   private resetCopiedTimeout?: number;
+  private swapAnimationTimeout?: number;
 
   set item(value: SymbolItem) {
     this.symbolItem = value;
     this.copied = false;
     window.clearTimeout(this.resetCopiedTimeout);
+    window.clearTimeout(this.swapAnimationTimeout);
     this.render();
   }
 
@@ -19,6 +21,7 @@ export class SymbolCard extends HTMLElement {
 
   disconnectedCallback(): void {
     window.clearTimeout(this.resetCopiedTimeout);
+    window.clearTimeout(this.swapAnimationTimeout);
   }
 
   private render(): void {
@@ -70,13 +73,39 @@ export class SymbolCard extends HTMLElement {
   }
 
   private showCopiedState(): void {
-    this.copied = true;
-    this.render();
+    this.setCopiedVisual(true);
     window.clearTimeout(this.resetCopiedTimeout);
     this.resetCopiedTimeout = window.setTimeout(() => {
-      this.copied = false;
-      this.render();
+      this.setCopiedVisual(false);
     }, 5000);
+  }
+
+  private setCopiedVisual(copied: boolean): void {
+    if (this.copied === copied) {
+      return;
+    }
+
+    const button = this.querySelector('.copy-button') as HTMLElement | null;
+    const icon = this.querySelector('.copy-icon') as HTMLElement | null;
+    if (!button || !icon || !this.symbolItem) {
+      this.copied = copied;
+      this.render();
+      return;
+    }
+
+    window.clearTimeout(this.swapAnimationTimeout);
+    button.classList.add('is-swapping');
+
+    this.swapAnimationTimeout = window.setTimeout(() => {
+      this.copied = copied;
+      button.classList.toggle('is-copied', copied);
+      button.setAttribute('aria-label', copied ? 'Copied' : `Copy ${this.symbolItem?.symbol ?? ''}`);
+      icon.textContent = copied ? 'check' : 'content_copy';
+
+      this.swapAnimationTimeout = window.setTimeout(() => {
+        button.classList.remove('is-swapping');
+      }, 180);
+    }, 140);
   }
 
   private displayCategory(item: SymbolItem): string {
