@@ -3,6 +3,8 @@ const viewportPadding = 8;
 
 class MdMenu extends HTMLElement {
   private documentClickListening = false;
+  private readonly defaultAnchorCorner = 'start-end';
+  private readonly defaultMenuCorner = 'start-start';
 
   connectedCallback(): void {
     this.setAttribute('role', this.getAttribute('role') ?? 'menu');
@@ -58,12 +60,15 @@ class MdMenu extends HTMLElement {
 
     const minLeft = viewportPadding;
     const maxLeft = Math.max(viewportPadding, window.innerWidth - menuWidth - viewportPadding);
-    const desiredLeft = anchorRect.right - menuWidth;
+    const anchorCorner = this.getAttribute('anchor-corner') ?? this.defaultAnchorCorner;
+    const menuCorner = this.getAttribute('menu-corner') ?? this.defaultMenuCorner;
+    const desiredLeft = this.getDesiredLeft(anchorRect, menuWidth, anchorCorner, menuCorner);
     const left = Math.min(Math.max(desiredLeft, minLeft), maxLeft);
 
+    const yOffset = Number(this.getAttribute('y-offset') ?? menuSurfaceGap);
     const desiredTop = placeAbove
-      ? anchorRect.top - menuHeight - menuSurfaceGap
-      : anchorRect.bottom + menuSurfaceGap;
+      ? anchorRect.top - menuHeight - yOffset
+      : anchorRect.bottom + yOffset;
     const minTop = viewportPadding;
     const maxTop = Math.max(viewportPadding, window.innerHeight - menuHeight - viewportPadding);
     const top = Math.min(Math.max(desiredTop, minTop), maxTop);
@@ -110,6 +115,10 @@ class MdMenu extends HTMLElement {
   };
 
   private setOpen(nextOpen: boolean): void {
+    if (this.open === nextOpen) {
+      return;
+    }
+
     this.toggleAttribute('open', nextOpen);
     this.hidden = !nextOpen;
 
@@ -122,13 +131,25 @@ class MdMenu extends HTMLElement {
         this.reposition();
         this.style.visibility = '';
         this.getMenuItems()[0]?.focus();
+        this.dispatchEvent(new CustomEvent('opened', { bubbles: true }));
       });
     } else {
       this.style.left = '';
       this.style.top = '';
       this.style.position = '';
       this.style.visibility = '';
+      this.dispatchEvent(new CustomEvent('closed', { bubbles: true }));
     }
+  }
+
+  private getDesiredLeft(
+    anchorRect: DOMRect,
+    menuWidth: number,
+    anchorCorner: string,
+    menuCorner: string,
+  ): number {
+    const anchorX = anchorCorner.startsWith('end') ? anchorRect.right : anchorRect.left;
+    return menuCorner.startsWith('end') ? anchorX - menuWidth : anchorX;
   }
 
   private focusAdjacentItem(direction: 1 | -1): void {
