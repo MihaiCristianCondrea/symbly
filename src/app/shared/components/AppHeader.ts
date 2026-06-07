@@ -63,7 +63,6 @@ export class AppHeader extends HTMLElement {
           <div class="menu-control theme-control">
             <md-icon-button
               id="themeMenuButton"
-              class="header-menu-button"
               aria-label="Choose theme mode: ${this.label(mode)}"
               aria-haspopup="menu"
               aria-expanded="false"
@@ -72,7 +71,7 @@ export class AppHeader extends HTMLElement {
             </md-icon-button>
             <md-menu
               anchor="themeMenuButton"
-              class="header-menu theme-menu"
+              class="theme-menu"
               aria-label="Theme menu"
             >
               ${themeModes.map((themeMode) => this.renderThemeItem(themeMode, mode)).join('')}
@@ -81,7 +80,6 @@ export class AppHeader extends HTMLElement {
           <div class="menu-control policy-control">
             <md-icon-button
               id="policyMenuButton"
-              class="header-menu-button"
               aria-label="Open Privacy Policy and Code of Conduct menu"
               aria-haspopup="menu"
               aria-expanded="false"
@@ -90,7 +88,7 @@ export class AppHeader extends HTMLElement {
             </md-icon-button>
             <md-menu
               anchor="policyMenuButton"
-              class="header-menu policy-menu"
+              class="policy-menu"
               aria-label="Privacy Policy and Code of Conduct menu"
             >
               ${policyLinks.map((link) => this.renderPolicyItem(link)).join('')}
@@ -154,9 +152,9 @@ export class AppHeader extends HTMLElement {
     const selected = themeMode === selectedMode;
     return `
       <md-menu-item type="menuitemradio" data-theme-mode="${themeMode}" aria-checked="${selected}">
-        <span slot="start" class="material-symbol menu-item-icon" aria-hidden="true">${themeIcons[themeMode]}</span>
+        <span slot="start" class="material-symbol" aria-hidden="true">${themeIcons[themeMode]}</span>
         <div slot="headline">${this.label(themeMode)}</div>
-        ${selected ? '<span slot="end" class="material-symbol menu-item-check" aria-hidden="true">check</span>' : ''}
+        ${selected ? '<span slot="end" class="material-symbol" aria-hidden="true">check</span>' : ''}
       </md-menu-item>
     `;
   }
@@ -164,7 +162,7 @@ export class AppHeader extends HTMLElement {
   private renderPolicyItem(link: HeaderLink): string {
     return `
       <md-menu-item href="${link.href}" target="_blank">
-        <span slot="start" class="material-symbol menu-item-icon" aria-hidden="true">${link.icon}</span>
+        <span slot="start" class="material-symbol" aria-hidden="true">${link.icon}</span>
         <div slot="headline">${link.label}</div>
       </md-menu-item>
     `;
