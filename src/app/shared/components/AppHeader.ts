@@ -135,9 +135,9 @@ export class AppHeader extends HTMLElement {
       });
     });
 
-    this.querySelectorAll<HTMLElement>('md-menu-item[href]').forEach((item) => {
+    this.querySelectorAll<HTMLElement>('md-menu-item[data-href]').forEach((item) => {
       item.addEventListener('click', () => {
-        const href = item.getAttribute('href') ?? '';
+        const href = item.dataset.href ?? '';
         if (href) {
           this.closeMenus();
           window.open(href, '_blank', 'noopener,noreferrer');
@@ -216,7 +216,7 @@ export class AppHeader extends HTMLElement {
 
   private renderPolicyItem(link: HeaderLink): string {
     return `
-      <md-menu-item href="${link.href}" target="_blank">
+      <md-menu-item data-href="${link.href}">
         <md-icon slot="start">${link.icon}</md-icon>
         <div slot="headline">${link.label}</div>
       </md-menu-item>

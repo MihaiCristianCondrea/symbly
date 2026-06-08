@@ -1,7 +1,0 @@
-{
-  "name": "@material/web",
-  "version": "0.0.0-symbly-vendor",
-  "type": "module",
-  "private": true,
-  "description": "Local Material Web compatibility layer used by Symbly in this offline environment."
-}

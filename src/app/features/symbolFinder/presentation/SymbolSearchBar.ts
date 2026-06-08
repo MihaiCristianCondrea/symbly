@@ -12,8 +12,8 @@ export class SymbolSearchBar extends HTMLElement {
           id="symbolSearchBar"
           class="symbol-search-field search-bar"
           type="search"
+          label="Search symbols"
           aria-label="Search symbols"
-          placeholder="Search symbols"
         >
           <md-icon slot="leading-icon">search</md-icon>
           <md-icon-button class="search-clear" slot="trailing-icon" aria-label="Clear search" hidden>
