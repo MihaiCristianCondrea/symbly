@@ -1,0 +1,65 @@
+:root {
+  font-family: "Google Sans Flex", "Google Sans", Roboto, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-optical-sizing: auto;
+  font-variation-settings: "slnt" 0, "wdth" 100, "GRAD" 0, "ROND" 0;
+  --md-ref-typeface-brand: "Google Sans Flex", "Google Sans", Roboto, sans-serif;
+  --md-ref-typeface-plain: "Google Sans Flex", "Google Sans", Roboto, sans-serif;
+  --md-sys-color-primary: #0b6b3a;
+  --md-sys-color-on-primary: #ffffff;
+  --md-sys-color-primary-container: #c6f1d4;
+  --md-sys-color-on-primary-container: #00210f;
+  --md-sys-color-secondary: #526350;
+  --md-sys-color-on-secondary: #ffffff;
+  --md-sys-color-secondary-container: #d5e8d0;
+  --md-sys-color-on-secondary-container: #111f10;
+  --md-sys-color-tertiary: #6f5d00;
+  --md-sys-color-on-tertiary: #ffffff;
+  --md-sys-color-tertiary-container: #f8e27a;
+  --md-sys-color-on-tertiary-container: #221b00;
+  --md-sys-color-background: #fffdf8;
+  --md-sys-color-on-background: #1a1c19;
+  --md-sys-color-surface: #fffdf8;
+  --md-sys-color-on-surface: #1a1c19;
+  --md-sys-color-surface-variant: #dde5d9;
+  --md-sys-color-on-surface-variant: #414941;
+  --md-sys-color-surface-container-lowest: #ffffff;
+  --md-sys-color-surface-container-low: #f7faf2;
+  --md-sys-color-surface-container: #f1f4ec;
+  --md-sys-color-surface-container-high: #ebeee7;
+  --md-sys-color-outline: #717970;
+  --md-sys-color-outline-variant: #c1c9bd;
+  --md-sys-color-error: #ba1a1a;
+  --app-page-max: 1120px;
+  --app-shadow-1: 0 1px 2px rgba(20, 26, 20, 0.08), 0 2px 8px rgba(20, 26, 20, 0.06);
+  --app-shadow-2: 0 2px 6px rgba(20, 26, 20, 0.08), 0 8px 24px rgba(20, 26, 20, 0.07);
+}
+
+:root[data-theme='dark'] {
+  --md-sys-color-primary: #94d5a3;
+  --md-sys-color-on-primary: #00391d;
+  --md-sys-color-primary-container: #00522b;
+  --md-sys-color-on-primary-container: #b0f1bf;
+  --md-sys-color-secondary: #b9ccb5;
+  --md-sys-color-on-secondary: #243424;
+  --md-sys-color-secondary-container: #3a4b39;
+  --md-sys-color-on-secondary-container: #d5e8d0;
+  --md-sys-color-tertiary: #dbc65f;
+  --md-sys-color-on-tertiary: #3a3000;
+  --md-sys-color-tertiary-container: #554600;
+  --md-sys-color-on-tertiary-container: #f8e27a;
+  --md-sys-color-background: #101511;
+  --md-sys-color-on-background: #e0e4db;
+  --md-sys-color-surface: #101511;
+  --md-sys-color-on-surface: #e0e4db;
+  --md-sys-color-surface-variant: #414941;
+  --md-sys-color-on-surface-variant: #c1c9bd;
+  --md-sys-color-surface-container-lowest: #0b0f0c;
+  --md-sys-color-surface-container-low: #181d18;
+  --md-sys-color-surface-container: #1c211c;
+  --md-sys-color-surface-container-high: #272c26;
+  --md-sys-color-outline: #8b9389;
+  --md-sys-color-outline-variant: #414941;
+  --md-sys-color-error: #ffb4ab;
+  --app-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.5), 0 2px 10px rgba(0, 0, 0, 0.32);
+  --app-shadow-2: 0 4px 14px rgba(0, 0, 0, 0.42);
+}
