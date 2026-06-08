@@ -1,5 +1,5 @@
 import { SymblyApp } from './app';
-import './styles.css';
+import './styles';
 
 const root = document.querySelector<HTMLElement>('#app');
 

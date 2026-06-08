@@ -1,0 +1,125 @@
+/* Material Web customization: keep app layout here and let real md-* components own internals. */
+md-icon,
+.material-symbol {
+  font-family: "Material Symbols Outlined", "Material Symbols Rounded", "Material Icons", system-ui, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 22px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  font-feature-settings: 'liga';
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
+
+.search-bar,
+md-outlined-text-field.symbol-search-field {
+  width: 100%;
+  border-radius: 999px;
+  --md-outlined-field-container-shape: 999px;
+  --md-outlined-text-field-container-shape: 999px;
+  --md-outlined-text-field-container-color: var(--md-sys-color-surface-container-lowest);
+  --md-outlined-text-field-outline-color: var(--md-sys-color-outline-variant);
+  --md-outlined-text-field-hover-outline-color: var(--md-sys-color-outline);
+  --md-outlined-text-field-focus-outline-color: var(--md-sys-color-primary);
+  --md-outlined-text-field-input-text-color: var(--md-sys-color-on-surface);
+  --md-outlined-text-field-leading-icon-color: var(--md-sys-color-on-surface-variant);
+  --md-outlined-text-field-trailing-icon-color: var(--md-sys-color-on-surface-variant);
+  --md-outlined-text-field-supporting-text-color: var(--md-sys-color-on-surface-variant);
+}
+
+.search-clear[hidden] { display: none; }
+
+.category-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  width: min(100%, 860px);
+  margin: 18px auto 0;
+  padding: 2px 0 8px;
+}
+
+.category-chips md-filter-chip {
+  --md-filter-chip-container-shape: 8px;
+  --md-filter-chip-outline-color: var(--md-sys-color-outline);
+  --md-filter-chip-label-text-color: var(--md-sys-color-on-surface-variant);
+  --md-filter-chip-selected-container-color: var(--md-sys-color-secondary-container);
+  --md-filter-chip-selected-label-text-color: var(--md-sys-color-on-secondary-container);
+  --md-filter-chip-selected-leading-icon-color: var(--md-sys-color-on-secondary-container);
+}
+
+.category-chip-icon {
+  color: currentColor;
+  font-size: 18px;
+}
+
+.menu-control md-icon-button[data-menu-open] {
+  --md-icon-button-icon-color: var(--md-sys-color-on-secondary-container);
+  --md-icon-button-hover-icon-color: var(--md-sys-color-on-secondary-container);
+  --md-icon-button-focus-icon-color: var(--md-sys-color-on-secondary-container);
+  --md-icon-button-pressed-icon-color: var(--md-sys-color-on-secondary-container);
+  --md-icon-button-hover-state-layer-color: var(--md-sys-color-secondary-container);
+  --md-icon-button-focus-state-layer-color: var(--md-sys-color-secondary-container);
+  --md-icon-button-pressed-state-layer-color: var(--md-sys-color-secondary-container);
+}
+
+.menu-control md-filled-tonal-button[data-menu-open] {
+  --md-filled-tonal-button-container-color: var(--md-sys-color-secondary-container);
+  --md-filled-tonal-button-label-text-color: var(--md-sys-color-on-secondary-container);
+  --md-filled-tonal-button-icon-color: var(--md-sys-color-on-secondary-container);
+}
+
+md-menu {
+  min-width: 220px;
+  max-width: min(320px, calc(100vw - 32px));
+  --md-menu-container-color: var(--md-sys-color-surface-container-lowest);
+  --md-menu-container-shape: 4px;
+  --md-menu-item-container-color: transparent;
+  --md-menu-item-selected-container-color: var(--md-sys-color-secondary-container);
+  --md-list-container-color: transparent;
+}
+
+app-snackbar {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  z-index: 40;
+  min-width: min(420px, calc(100vw - 32px));
+  max-width: min(560px, calc(100vw - 32px));
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 16px;
+  border-radius: 4px;
+  color: var(--md-sys-color-inverse-on-surface, #f5eff7);
+  background: var(--md-sys-color-inverse-surface, #322f35);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18), 0 6px 18px rgba(0, 0, 0, 0.14);
+  font-family: var(--md-ref-typeface-plain);
+  font-size: 0.875rem;
+  font-weight: 400;
+  opacity: 0;
+  transform: translateX(-50%) translateY(120%);
+  transition: transform 180ms cubic-bezier(0.2, 0, 0, 1), opacity 180ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+app-snackbar[open] {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.play-triangle { display: none; }
+
+@media (max-width: 680px) {
+  .search-field-wrap,
+  .category-chips {
+    width: 100%;
+  }
+}
