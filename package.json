@@ -10,7 +10,7 @@
 		"preview": "vite preview"
 	},
 	"dependencies": {
-		"@material/web": "^2.3.0"
+		"@material/web": "^2.4.1"
 	},
 	"devDependencies": {
 		"typescript": "^4.6.4",
