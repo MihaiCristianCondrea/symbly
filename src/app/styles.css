@@ -732,36 +732,6 @@ md-snackbar[open] {
   transform: translateY(-1px);
 }
 
-.menu-control md-menu {
-  min-width: 220px;
-  max-width: min(300px, calc(100vw - 32px));
-  padding: 8px;
-  --md-menu-container-color: var(--md-sys-color-surface-container-lowest);
-  --md-menu-container-shape: 18px;
-  --md-menu-item-container-color: transparent;
-  --md-menu-item-selected-container-color: var(--md-sys-color-secondary-container);
-  --md-list-container-color: transparent;
-  filter: drop-shadow(0 18px 36px rgba(18, 27, 19, 0.18));
-}
-
-.menu-control md-menu-item {
-  margin: 2px 0;
-  border-radius: 14px;
-  color: var(--md-sys-color-on-surface);
-  --md-list-item-leading-icon-color: var(--md-sys-color-on-surface-variant);
-  --md-list-item-trailing-icon-color: var(--md-sys-color-primary);
-  --md-list-item-label-text-font: var(--md-ref-typeface-plain);
-  --md-list-item-label-text-weight: 600;
-}
-
-.menu-control md-menu-item[selected] {
-  color: var(--md-sys-color-on-secondary-container);
-}
-
-.menu-control md-menu-item::part(focus-ring) {
-  border-radius: 14px;
-}
-
 
 symbol-card {
   display: block;
@@ -1086,20 +1056,21 @@ md-filter-chip:hover {
   color: var(--md-sys-color-on-secondary-container);
 }
 
-.menu-control {
-  position: relative;
-}
-
 md-menu {
   min-width: 220px;
   max-width: min(320px, calc(100vw - 32px));
   padding: 8px 0;
-  border-radius: var(--md-menu-container-shape, 4px);
+  border-radius: 4px;
   color: var(--md-sys-color-on-surface);
-  background: var(--md-menu-container-color, var(--md-sys-color-surface-container-lowest));
+  background: var(--md-sys-color-surface-container-lowest);
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.14), 0 6px 18px rgba(0, 0, 0, 0.12);
   z-index: 30;
   overflow: hidden;
+  --md-menu-container-color: var(--md-sys-color-surface-container-lowest);
+  --md-menu-container-shape: 4px;
+  --md-menu-item-container-color: transparent;
+  --md-menu-item-selected-container-color: var(--md-sys-color-secondary-container);
+  --md-list-container-color: transparent;
 }
 
 md-menu[hidden] { display: none; }
@@ -1110,12 +1081,19 @@ md-menu-item {
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   gap: 12px;
+  margin: 0;
   padding: 0 12px;
+  border-radius: 0;
   color: var(--md-sys-color-on-surface);
   font-family: var(--md-ref-typeface-plain);
   font-size: 0.875rem;
+  font-weight: 400;
   line-height: 1.25rem;
   cursor: pointer;
+  --md-list-item-leading-icon-color: var(--md-sys-color-on-surface-variant);
+  --md-list-item-trailing-icon-color: var(--md-sys-color-primary);
+  --md-list-item-label-text-font: var(--md-ref-typeface-plain);
+  --md-list-item-label-text-weight: 400;
 }
 
 md-menu-item:hover,
@@ -1161,11 +1139,6 @@ md-snackbar[open] {
   transform: translateX(-50%) translateY(0);
 }
 
-.menu-control md-menu {
-  --md-menu-container-shape: 4px;
-  filter: none;
-}
-
 .menu-control md-icon-button[data-menu-open] {
   color: var(--md-sys-color-on-secondary-container);
   background: var(--md-sys-color-secondary-container);
@@ -1183,20 +1156,6 @@ md-snackbar[open] {
   .category-chips {
     width: 100%;
   }
-}
-
-.menu-control md-menu-item {
-  margin: 0;
-  border-radius: 0;
-  color: var(--md-sys-color-on-surface);
-  --md-list-item-leading-icon-color: var(--md-sys-color-on-surface-variant);
-  --md-list-item-trailing-icon-color: var(--md-sys-color-primary);
-  --md-list-item-label-text-font: var(--md-ref-typeface-plain);
-  --md-list-item-label-text-weight: 400;
-}
-
-.menu-control md-menu-item[selected] {
-  color: var(--md-sys-color-on-secondary-container);
 }
 
 md-outlined-text-field.symbol-search-field:focus-within {

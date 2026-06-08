@@ -91,10 +91,6 @@ export class AppHeader extends HTMLElement {
               anchor="themeMenuButton"
               class="theme-menu"
               aria-label="Theme menu"
-              positioning="popover"
-              y-offset="8"
-              anchor-corner="end-start"
-              menu-corner="start-end"
             >
               ${themeModes.map((themeMode) => this.renderThemeItem(themeMode, mode)).join('')}
             </md-menu>
@@ -114,10 +110,6 @@ export class AppHeader extends HTMLElement {
               anchor="policyMenuButton"
               class="policy-menu"
               aria-label="Privacy Policy and Code of Conduct menu"
-              positioning="popover"
-              y-offset="8"
-              anchor-corner="end-start"
-              menu-corner="start-end"
             >
               ${policyLinks.map((link) => this.renderPolicyItem(link)).join('')}
             </md-menu>
