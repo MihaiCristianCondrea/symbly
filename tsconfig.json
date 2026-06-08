@@ -14,11 +14,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
-    "skipLibCheck": true,
-    "baseUrl": ".",
-    "paths": {
-      "@material/web/*": ["src/vendor/material-web/*"]
-    }
+    "skipLibCheck": true
   },
   "include": ["src"]
 }
