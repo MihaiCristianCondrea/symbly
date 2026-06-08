@@ -747,8 +747,9 @@ md-icon,
 .search-bar,
 md-outlined-text-field.symbol-search-field {
   width: 100%;
-  --md-outlined-field-container-shape: 22px;
-  --md-outlined-text-field-container-shape: 22px;
+  border-radius: 999px;
+  --md-outlined-field-container-shape: 999px;
+  --md-outlined-text-field-container-shape: 999px;
   --md-outlined-text-field-container-color: var(--md-sys-color-surface-container-lowest);
   --md-outlined-text-field-outline-color: var(--md-sys-color-outline-variant);
   --md-outlined-text-field-hover-outline-color: var(--md-sys-color-outline);
