@@ -1,6 +1,6 @@
 import '@material/web/chips/chip-set.js';
 import '@material/web/chips/filter-chip.js';
-import '@material/web/snackbar/snackbar.js';
+import { AppSnackbar } from '../../../shared/components/AppSnackbar';
 import type { CopySymbolUseCase } from '../domain/CopySymbolUseCase';
 import type { SearchSymbolsUseCase } from '../domain/SearchSymbolsUseCase';
 import { symbolFilterCategories, type SymbolFilterCategory } from '../domain/SymbolCategory';
@@ -24,7 +24,7 @@ const categoryIcons: Record<SymbolFilterCategory, string> = {
 
 export class SymbolFinderPage extends HTMLElement {
   private grid?: SymbolGrid;
-  private snackbar?: HTMLElement & { labelText?: string; show?: () => void };
+  private snackbar?: AppSnackbar;
   private searchSymbolsUseCase?: SearchSymbolsUseCase;
   private copySymbolUseCase?: CopySymbolUseCase;
   private query = '';
@@ -63,11 +63,11 @@ export class SymbolFinderPage extends HTMLElement {
         </div>
         <symbol-grid></symbol-grid>
       </section>
-      <md-snackbar></md-snackbar>
+      <app-snackbar></app-snackbar>
     `;
 
     this.grid = this.querySelector('symbol-grid') as SymbolGrid;
-    this.snackbar = this.querySelector('md-snackbar') as HTMLElement & { labelText?: string; show?: () => void };
+    this.snackbar = this.querySelector('app-snackbar') as AppSnackbar;
     this.addEventListener('symbol-search', (event) => {
       this.query = (event as CustomEvent<string>).detail;
       void this.search();
