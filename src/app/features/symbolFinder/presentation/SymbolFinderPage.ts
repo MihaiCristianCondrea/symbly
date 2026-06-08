@@ -1,5 +1,6 @@
 import '@material/web/chips/chip-set.js';
 import '@material/web/chips/filter-chip.js';
+import '@material/web/icon/icon.js';
 import { AppSnackbar } from '../../../shared/components/AppSnackbar';
 import type { CopySymbolUseCase } from '../domain/CopySymbolUseCase';
 import type { SearchSymbolsUseCase } from '../domain/SearchSymbolsUseCase';
@@ -95,8 +96,7 @@ export class SymbolFinderPage extends HTMLElement {
         data-category="${this.escapeAttribute(category)}"
         ${selected}
       >
-        <span class="material-symbol category-chip-icon" aria-hidden="true">${categoryIcons[category]}</span>
-        <span>${this.escape(category)}</span>
+        <md-icon slot="icon" class="category-chip-icon" aria-hidden="true">${categoryIcons[category]}</md-icon>
       </md-filter-chip>
     `;
   }
