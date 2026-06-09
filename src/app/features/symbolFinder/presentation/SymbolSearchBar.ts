@@ -10,7 +10,7 @@ export class SymbolSearchBar extends HTMLElement {
       <div class="search-field-wrap">
         <md-outlined-text-field
           id="symbolSearchBar"
-          class="symbol-search-field search-bar"
+          class="symbol-search-field search-field search-bar"
           type="search"
           label="Search symbols"
           aria-label="Search symbols"

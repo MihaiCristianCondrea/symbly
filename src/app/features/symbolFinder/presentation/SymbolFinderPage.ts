@@ -51,13 +51,13 @@ export class SymbolFinderPage extends HTMLElement {
         <div class="hero-content">
           <h1 id="hero-title">Search any symbol</h1>
           <p class="hero-copy">Find and copy symbols in seconds. From currency signs and arrows to math operators, punctuation, legal marks, and developer symbols.</p>
+          <symbol-search-bar></symbol-search-bar>
+          <md-chip-set class="category-chips" aria-label="Filter symbol categories">
+            ${symbolFilterCategories.map((category) => this.renderChip(category)).join('')}
+          </md-chip-set>
         </div>
       </section>
       <section class="finder-area" aria-label="Search and copy symbols">
-        <symbol-search-bar></symbol-search-bar>
-        <md-chip-set class="category-chips" aria-label="Filter symbol categories">
-          ${symbolFilterCategories.map((category) => this.renderChip(category)).join('')}
-        </md-chip-set>
         <div class="results-heading">
           <h2>${this.headingText()}</h2>
           <span class="results-count"></span>

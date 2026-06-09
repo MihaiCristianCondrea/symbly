@@ -20,11 +20,13 @@ md-icon,
 }
 
 .search-bar,
+.search-field,
 md-outlined-text-field.symbol-search-field {
   width: 100%;
-  border-radius: 999px;
-  --md-outlined-field-container-shape: 999px;
-  --md-outlined-text-field-container-shape: 999px;
+  box-sizing: border-box;
+  border-radius: 28px;
+  --md-outlined-field-container-shape: 28px;
+  --md-outlined-text-field-container-shape: 28px;
   --md-outlined-text-field-container-color: var(--md-sys-color-surface-container-lowest);
   --md-outlined-text-field-outline-color: var(--md-sys-color-outline-variant);
   --md-outlined-text-field-hover-outline-color: var(--md-sys-color-outline);
@@ -42,8 +44,8 @@ md-outlined-text-field.symbol-search-field {
   flex-wrap: wrap;
   justify-content: center;
   gap: 10px;
-  width: min(100%, 860px);
-  margin: 18px auto 0;
+  width: 100%;
+  margin-top: 20px;
   padding: 2px 0 8px;
 }
 
@@ -117,9 +119,3 @@ app-snackbar[open] {
 
 .play-triangle { display: none; }
 
-@media (max-width: 680px) {
-  .search-field-wrap,
-  .category-chips {
-    width: 100%;
-  }
-}

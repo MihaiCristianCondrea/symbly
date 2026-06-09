@@ -5,18 +5,13 @@
 symbol-search-bar {
   display: block;
   width: 100%;
-}
-
-.search-field-wrap {
-  width: min(100%, 760px);
-  max-width: 100%;
-  margin: 0 auto;
+  margin-top: 28px;
 }
 
 .search-field-wrap .symbol-search-field {
   display: block;
   width: 100%;
-  max-width: 100%;
+  box-sizing: border-box;
 }
 
 
