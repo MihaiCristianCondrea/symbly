@@ -2,9 +2,21 @@
   margin: 0 auto 44px;
 }
 
+symbol-search-bar {
+  display: block;
+  width: 100%;
+}
+
 .search-field-wrap {
-  max-width: 860px;
+  width: min(100%, 760px);
+  max-width: 100%;
   margin: 0 auto;
+}
+
+.search-field-wrap .symbol-search-field {
+  display: block;
+  width: 100%;
+  max-width: 100%;
 }
 
 
