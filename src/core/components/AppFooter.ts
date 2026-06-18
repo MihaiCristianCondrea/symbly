@@ -54,11 +54,15 @@ export class AppFooter extends HTMLElement {
 
   private renderSocialLink(link: SocialLink, index: number): string {
     return `
-      <a href="${link.href}" ${link.href.startsWith('mailto:') ? '' : 'target="_blank" rel="noopener noreferrer"'} aria-label="${link.label}" title="${this.linkTitle(link.label)}" style="--item-index: ${index};">
-        <md-icon-button>
-          <md-icon aria-hidden="true">${link.icon}</md-icon>
-        </md-icon-button>
-      </a>
+      <md-icon-button
+        href="${link.href}"
+        ${link.href.startsWith('mailto:') ? '' : 'target="_blank"'}
+        aria-label="${link.label}"
+        title="${this.linkTitle(link.label)}"
+        style="--item-index: ${index};"
+      >
+        <md-icon aria-hidden="true">${link.icon}</md-icon>
+      </md-icon-button>
     `;
   }
 
