@@ -2,83 +2,56 @@
 
 ### How to: Create Components
 
-*tldr: Extend `WebComponent` to define your own components.*
+*tldr: Create a native custom element class, register it once, and import it from the app or feature shell that renders it.*
 
-1. Create an html (and css) file for your component in a new folder
-2. Create a new ts class that extends `WebComponent`
-3. Use the component either in HTML or in TypeScript:
-   - in HTML: `<my-component></my-component>`
-   - in TypeScript: `const myComponent = new MyComponent()`
-4. (don't forget to call `WebComponentLoader.loadAll().then(() => {...})` at the start of your application)
+1. Create a TypeScript file in the relevant `presentation/` folder for feature UI, or in `src/core/components/` for app-wide UI.
+2. Extend `HTMLElement` and implement rendering/event wiring in the element class.
+3. Register the element with `customElements.define('your-tag-name', YourElement)` after checking that the tag is not already registered when needed.
+4. Import the component from the parent component or app shell before rendering its tag.
 
-For examples, see the [ExampleWebComponent](/src/components/ExampleComponent/)
+Examples:
 
-### How to: Communicate
+- `src/features/symbol-finder/presentation/SymbolFinderPage.ts`
+- `src/features/app-showcase/presentation/AppShowcaseSection.ts`
+- `src/core/components/AppHeader.ts`
 
-*tldr: Communication is based on the pubSub pattern. Extend `Observable` to make your class observable, use `EventBus` for global communication.*
+### How to: Add Feature Logic
 
-#### Observable
+*tldr: Put domain rules in `domain/`, data adapters in `data/`, and UI in `presentation/`.*
 
-Extending `Observable` provides a class with basic pubSub functionality:
-1. create a class that extends `Observable`
-2. call `.addEventListener` on objects of that class to subscribe to events
-3. call `notifyAll` to publish an event to all subscribers
+Feature folders live under `src/features/<feature-name>/` and use this structure:
 
-For an example, see [Observable](/src/lib/events/Observable.ts)
+- `domain/models/` for feature types.
+- `domain/repositories/` for repository contracts.
+- `domain/usecases/` for application actions.
+- `data/dto/` for remote DTOs, when needed.
+- `data/mappers/` for mapping remote DTOs to domain models, when needed.
+- `data/repositories/` for repository implementations.
+- `presentation/` for custom elements.
 
-#### EventBus
+### How to: Wire Dependencies
 
-If you wish to send global events, you can use the `EventBus` class:
-1. import the `EventBus` singleton 
-2. call `.addEventListener` to subscribe to events
-3. call `.notifyAll` to publish an event to all subscribers
+*tldr: Add composition wiring to `src/app/DataServices.ts`, then pass dependencies from `src/app/App.ts` into custom elements.*
 
-For an example, see [EventBus](/src/lib/events/EventBus.ts)
+1. Define domain contracts and use cases in the feature folder.
+2. Implement local or remote adapters in `data/`.
+3. Instantiate shared services, repositories, and use cases in `DataServices`.
+4. Configure the relevant presentation component from `SymblyApp` after the component is rendered.
 
-### How to: Manage state
+### How to: Use Material Web
 
-*tldr: Create Models to define data structures, use them via States in your Components. Use GlobalState to store globally needed States.*
+*tldr: Register Material elements in `src/core/material/MaterialElements.ts` and use supported attributes, slots, and design tokens.*
 
-#### Model
+- Add new `@material/web` element imports to `src/core/material/MaterialElements.ts`.
+- Import `src/core/material/MaterialElements.ts` from the app shell, not from each component.
+- Do not import Material Web from a runtime CDN.
+- Do not register fake fallback elements under `md-*` tag names.
+- Prefer CSS custom properties in `src/app/styles/_material-web.scss` for theming.
 
-`Model` represents a basic data structure thats used in your application.
-NOTE: Use State to make observe/manipulate Models. Don't use Models directly.
-1. extend `Model` and define the properties of your model
+### How to: Manage Theme State
 
-For an example, see [Model](/src/data/models/ExampleModel.ts)
+Theme state is handled by `src/app/ThemeController.ts` and persisted through `src/core/storage/LocalStorageService.ts`. UI controls should call `ThemeController.setMode(...)` rather than writing directly to storage or the document root.
 
-#### State
+### How to: Copy Symbols
 
-`State` is a wrapper class that allows you to make any existing object observable (not just Models).
-1. use `new State(value)` to create a new `State` object
-2. call `.addEventListener` to subscribe to changes
-3. call `liveData.value` to get the current value
-4. call `liveData.value = newValue` to update the value
-
-For an example, see [State](/src/lib/state/State.ts)
-
-#### GlobalState
-
-`GlobalState` is a singleton, where States, which are needed in many Components, should be stored. 
-That way, they can be accessed from anywhere in the application.
-1. import the `GlobalState` singleton
-2. use `GlobalState.addModel(model)` to add a model to the store
-3. use GlobalState.findModel(), GlobalState.findModels() and GlobalState.getModelById() retrieve models from the store
-4. (don't forget to call GlobalState.init() at the start of the application)
-
-For an example, see [GlobalState](/src/lib/state/GlobalState.ts)
-
-### How to: Get Data
-
-*tldr: Use DataManager to fetch/save data as Models from external APIs or Databases.*
-
-#### DataManager
-
-`DataManager` is a singleton, in which you define functions to fetch/save Models.
-1. import the `DataManager` singleton
-2. use any of the `DataManager` functions to retrieve data as Models
-3. (don't forget to call DataManager.init() at the start of the application)
-
-## 🌅 Cheat Sheet
-
-![📖 Cheat Sheet](docs/res/../../res/web-component-architecture.svg)
+Copy behavior flows through `CopySymbolUseCase`, which depends on `ClipboardService`. UI components should call the use case and display success/failure state rather than using `navigator.clipboard` directly.
