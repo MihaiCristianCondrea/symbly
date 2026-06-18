@@ -31,27 +31,37 @@ The app uses a practical clean architecture layout for a small static web app:
 ```text
 src/
   app/
+    App.ts
+    DataServices.ts
     main.ts
-    app.ts
-    theme/
-      ThemeController.ts
-      ThemeMode.ts
-    core/
-      clipboard/
-        ClipboardService.ts
-      storage/
-        LocalStorageService.ts
-    features/
-      symbolFinder/
-        domain/
-        data/
-        presentation/
-      appShowcase/
-        domain/
-        data/
-        presentation/
-    shared/
-      components/
+    ThemeController.ts
+    ThemeMode.ts
+    styles/
+  core/
+    clipboard/
+    components/
+    material/
+    storage/
+    typings/
+  features/
+    symbol-finder/
+      domain/
+        models/
+        repositories/
+        usecases/
+      data/
+        repositories/
+      presentation/
+    app-showcase/
+      domain/
+        models/
+        repositories/
+        usecases/
+      data/
+        dto/
+        mappers/
+        repositories/
+      presentation/
 ```
 
 ### Symbol finder flow
