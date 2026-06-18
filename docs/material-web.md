@@ -51,6 +51,8 @@ Correct pattern:
 </md-outlined-button>
 ```
 
+Use the same pattern for `md-icon-button` links. Do not wrap an icon button in an anchor.
+
 ## Icon buttons and favorite actions
 
 Icon buttons usually have no visible text label. Material's icon-button accessibility guidance calls for an `aria-label` when the label needs to be more descriptive. Every standalone icon button in this project must have an accessible label.
@@ -58,6 +60,8 @@ Icon buttons usually have no visible text label. Material's icon-button accessib
 ## Text fields and chips
 
 Text fields should provide a meaningful `label`, appropriate `type`, and relevant browser hints such as `autocomplete`. Symbol category filtering uses Material filter chips inside a chip set; keep chip semantics aligned with the current selected category state.
+
+The symbol search field is intentionally fully rounded. Preserve that shape with supported Material Web text-field tokens such as `--md-outlined-text-field-container-shape`, not by adding direct border-radius, padding, height, or internal-layout overrides to the Material element.
 
 ## Theming
 

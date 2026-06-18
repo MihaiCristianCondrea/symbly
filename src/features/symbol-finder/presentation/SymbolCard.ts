@@ -4,13 +4,11 @@ export class SymbolCard extends HTMLElement {
   private symbolItem?: SymbolItem;
   private copied = false;
   private resetCopiedTimeout?: number;
-  private swapAnimationTimeout?: number;
 
   set item(value: SymbolItem) {
     this.symbolItem = value;
     this.copied = false;
     window.clearTimeout(this.resetCopiedTimeout);
-    window.clearTimeout(this.swapAnimationTimeout);
     this.render();
   }
 
@@ -20,7 +18,6 @@ export class SymbolCard extends HTMLElement {
 
   disconnectedCallback(): void {
     window.clearTimeout(this.resetCopiedTimeout);
-    window.clearTimeout(this.swapAnimationTimeout);
   }
 
   private render(): void {
@@ -32,8 +29,14 @@ export class SymbolCard extends HTMLElement {
       <article class="symbol-card" role="button" tabindex="0" aria-label="Copy ${this.escape(this.symbolItem.name)}">
         <div class="symbol-card-top">
           <span class="symbol-glyph">${this.escape(this.symbolItem.symbol)}</span>
-          <md-icon-button class="copy-button ${this.copied ? 'is-copied' : ''}" aria-label="${this.copied ? 'Copied' : `Copy ${this.escape(this.symbolItem.symbol)}`}">
-            <md-icon class="copy-icon" aria-hidden="true">${this.copied ? 'check' : 'content_copy'}</md-icon>
+          <md-icon-button
+            class="copy-button ${this.copied ? 'is-copied' : ''}"
+            ${this.copied ? 'selected' : ''}
+            aria-label="${this.copied ? 'Copied' : `Copy ${this.escape(this.symbolItem.symbol)}`}"
+            aria-label-selected="Copied"
+          >
+            <md-icon aria-hidden="true">content_copy</md-icon>
+            <md-icon slot="selected" aria-hidden="true">check</md-icon>
           </md-icon-button>
         </div>
         <div class="symbol-meta">
@@ -84,27 +87,18 @@ export class SymbolCard extends HTMLElement {
       return;
     }
 
-    const button = this.querySelector('.copy-button') as HTMLElement | null;
-    const icon = this.querySelector('.copy-icon') as HTMLElement | null;
-    if (!button || !icon || !this.symbolItem) {
+    const button = this.querySelector('.copy-button') as HTMLElement & { selected?: boolean } | null;
+    if (!button) {
       this.copied = copied;
       this.render();
       return;
     }
 
-    window.clearTimeout(this.swapAnimationTimeout);
-    button.classList.add('is-swapping');
-
-    this.swapAnimationTimeout = window.setTimeout(() => {
-      this.copied = copied;
-      button.classList.toggle('is-copied', copied);
-      button.setAttribute('aria-label', copied ? 'Copied' : `Copy ${this.symbolItem?.symbol ?? ''}`);
-      icon.textContent = copied ? 'check' : 'content_copy';
-
-      this.swapAnimationTimeout = window.setTimeout(() => {
-        button.classList.remove('is-swapping');
-      }, 180);
-    }, 140);
+    this.copied = copied;
+    button.classList.toggle('is-copied', copied);
+    button.setAttribute('aria-label', copied ? 'Copied' : `Copy ${this.symbolItem?.symbol ?? ''}`);
+    button.toggleAttribute('selected', copied);
+    button.selected = copied;
   }
 
   private displayCategory(item: SymbolItem): string {

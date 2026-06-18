@@ -1,5 +1,4 @@
 /* Material Web customization: keep app layout here and let real md-* components own internals. */
-md-icon,
 .material-symbol {
   font-family: "Material Symbols Outlined", "Material Symbols Rounded", "Material Icons", system-ui, sans-serif;
   font-weight: 400;
@@ -20,12 +19,14 @@ md-icon,
 }
 
 .search-bar,
-.search-field,
+.search-field {
+  width: 100%;
+  box-sizing: border-box;
+}
+
 md-outlined-text-field.symbol-search-field {
   width: 100%;
   box-sizing: border-box;
-  border-radius: 28px;
-  --md-outlined-field-container-shape: 28px;
   --md-outlined-text-field-container-shape: 28px;
   --md-outlined-text-field-container-color: var(--md-sys-color-surface-container-lowest);
   --md-outlined-text-field-outline-color: var(--md-sys-color-outline-variant);
@@ -60,7 +61,6 @@ md-outlined-text-field.symbol-search-field {
 
 .category-chip-icon {
   color: currentColor;
-  font-size: 18px;
 }
 
 .menu-control md-icon-button[data-menu-open] {
@@ -118,4 +118,3 @@ app-snackbar[open] {
 }
 
 .play-triangle { display: none; }
-

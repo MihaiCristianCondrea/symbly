@@ -10,14 +10,6 @@
 }
 
 
-@keyframes copy-icon-swap {
-  0% { transform: scale(1); }
-  35% { transform: scale(0.55); opacity: 0; }
-  65% { transform: scale(1.18); opacity: 1; }
-  100% { transform: scale(1); opacity: 1; }
-}
-
-
 .hero-content,
 .search-field-wrap,
 .category-chips,
@@ -47,17 +39,7 @@ symbol-card {
 }
 
 .copy-button {
-  transition: transform 180ms cubic-bezier(0.2, 0, 0, 1), color 180ms ease, background 180ms ease;
-}
-
-.copy-button .copy-icon {
-  transition: transform 180ms cubic-bezier(0.2, 0, 0, 1), color 180ms ease;
-}
-
-.copy-button:hover .copy-icon { transform: scale(1.08); }
-
-.copy-button.is-swapping .copy-icon {
-  animation: copy-icon-swap 320ms cubic-bezier(0.2, 0, 0, 1) both;
+  transition: color 180ms ease;
 }
 
 .copy-button.is-copied {
@@ -80,22 +62,18 @@ symbol-card {
   gap: 14px;
 }
 
-.social-icons a {
+.social-icons md-icon-button {
   color: var(--md-sys-color-on-surface-variant);
-  text-decoration: none;
   animation: premium-rise-in 360ms cubic-bezier(0.2, 0, 0, 1) both;
   animation-delay: min(calc(var(--item-index, 0) * 45ms), 360ms);
-}
-
-.social-icons md-icon-button {
   --md-icon-button-icon-color: currentColor;
   --md-icon-button-hover-icon-color: var(--md-sys-color-on-primary-container);
   --md-icon-button-focus-icon-color: var(--md-sys-color-on-primary-container);
   --md-icon-button-pressed-icon-color: var(--md-sys-color-on-primary-container);
 }
 
-.social-icons a:hover md-icon-button,
-.social-icons a:focus-visible md-icon-button {
+.social-icons md-icon-button:hover,
+.social-icons md-icon-button:focus-visible {
   color: var(--md-sys-color-on-primary-container);
 }
 
