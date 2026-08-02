@@ -1,1 +1,10 @@
-import './app/main';
+import { SymblyApp } from './app/App';
+import './app/styles';
+
+const root = document.querySelector<HTMLElement>('#app');
+
+if (!root) {
+  throw new Error('Symbly root element was not found.');
+}
+
+new SymblyApp().mount(root);

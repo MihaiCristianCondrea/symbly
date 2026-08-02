@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Symbly maskable app icon</title>
+  <desc id="desc">A safe-zone Symbly icon with a section symbol on a green and gold mark.</desc>
+  <defs>
+    <linearGradient id="background" x1="72" y1="64" x2="440" y2="448" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0B5737" />
+      <stop offset="1" stop-color="#9B7412" />
+    </linearGradient>
+    <linearGradient id="mark" x1="144" y1="132" x2="368" y2="380" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#146C43" />
+      <stop offset="1" stop-color="#C59B24" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" fill="url(#background)" />
+  <rect x="96" y="96" width="320" height="320" rx="96" fill="url(#mark)" />
+  <circle cx="354" cy="158" r="46" fill="#F3E39B" opacity="0.9" />
+  <text x="256" y="332" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="220" font-weight="600" fill="#FFFFFF">§</text>
+</svg>
