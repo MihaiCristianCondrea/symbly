@@ -5,6 +5,8 @@ import '@material/web/chips/chip-set.js';
 import '@material/web/chips/filter-chip.js';
 import '@material/web/icon/icon.js';
 import '@material/web/iconbutton/icon-button.js';
+import '@material/web/labs/item/item.js';
+import '@material/web/labs/navigationdrawer/navigation-drawer-modal.js';
 import '@material/web/menu/menu.js';
 import '@material/web/menu/menu-item.js';
 import '@material/web/progress/circular-progress.js';
