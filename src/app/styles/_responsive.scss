@@ -11,8 +11,8 @@
     padding: 0 12px;
   }
 
-  .topbar-title { gap: 12px; }
   .brand strong { font-size: 20px; }
+  .header-actions { gap: 4px; }
 
   page-container { width: min(100% - 24px, var(--app-page-max)); }
   .footer-content { width: min(100% - 24px, var(--app-page-max)); }
@@ -55,6 +55,10 @@
 }
 
 @media (max-width: 430px) {
+  .theme-menu-button {
+    min-width: 0;
+  }
+
   .symbol-grid { grid-template-columns: 1fr 1fr; }
   .symbol-glyph { font-size: 2.15rem; }
   .footer-social-links { gap: 18px; }

@@ -7,8 +7,8 @@ interface HeaderLink {
   icon: string;
 }
 
-interface NavigationDrawerElement extends HTMLElement {
-  opened: boolean;
+interface HeaderMenuElement extends HTMLElement {
+  open: boolean;
 }
 
 const policyLinks: HeaderLink[] = [
@@ -34,9 +34,11 @@ export class AppHeader extends HTMLElement {
   private themeController?: ThemeController;
 
   private readonly handleDocumentKeydown = (event: KeyboardEvent): void => {
-    if (event.key === 'Escape') {
-      this.toggleDrawer(false);
+    if (event.key !== 'Escape') {
+      return;
     }
+
+    this.closeMenus();
   };
 
   configure(themeController: ThemeController): void {
@@ -58,142 +60,158 @@ export class AppHeader extends HTMLElement {
   private render(): void {
     const mode = this.themeController?.getMode() ?? 'system';
     this.innerHTML = `
-      <div id="drawerLayer" class="drawer-layer" aria-hidden="true">
-        <md-navigation-drawer-modal
-          id="appDrawer"
-          class="app-drawer"
-          pivot="start"
-          aria-label="Application menu"
-          aria-modal="true"
-        >
-          <div class="drawer-header">
-            <h2>Symbly</h2>
-            <md-icon-button id="drawerClose" type="button" aria-label="Close menu">
-              <md-icon>close</md-icon>
-            </md-icon-button>
-          </div>
-          <div class="drawer-content">
-            <a class="drawer-home" href="#app">
-              <md-item class="drawer-item">
-                <span class="drawer-item-container" slot="container" aria-hidden="true"></span>
-                <md-icon slot="start">home</md-icon>
-                Home
-              </md-item>
-            </a>
-            <p class="drawer-section-label">Theme</p>
-            ${themeModes.map((themeMode) => this.renderThemeItem(themeMode, mode)).join('')}
-            <div class="drawer-spacer"></div>
-            <p class="drawer-section-label">About</p>
-            ${policyLinks.map((link) => this.renderPolicyItem(link)).join('')}
-          </div>
-        </md-navigation-drawer-modal>
-      </div>
       <header class="app-header">
-        <div class="topbar-title">
-          <md-icon-button
-            id="drawerOpen"
-            type="button"
-            aria-label="Open menu"
-            aria-expanded="false"
-            aria-controls="appDrawer"
-          >
-            <md-icon id="drawerOpenIcon">menu</md-icon>
-          </md-icon-button>
-          <a class="brand" href="#app" aria-label="Symbly home">
-            <strong>Symbly</strong>
-          </a>
+        <a class="brand" href="#app" aria-label="Symbly home">
+          <strong>Symbly</strong>
+        </a>
+        <div class="header-actions">
+          <div class="menu-control theme-control">
+            <md-filled-tonal-button
+              id="themeMenuButton"
+              class="theme-menu-button"
+              trailing-icon
+              aria-label="Choose theme mode: ${this.label(mode)}"
+              aria-haspopup="menu"
+              aria-expanded="false"
+              aria-controls="themeMenu"
+            >
+              ${this.label(mode)}
+              <md-icon slot="icon">expand_more</md-icon>
+            </md-filled-tonal-button>
+            <md-menu
+              id="themeMenu"
+              anchor="themeMenuButton"
+              class="theme-menu"
+              aria-label="Theme menu"
+            >
+              ${themeModes.map((themeMode) => this.renderThemeItem(themeMode, mode)).join('')}
+            </md-menu>
+          </div>
+          <div class="menu-control policy-control">
+            <md-icon-button
+              id="policyMenuButton"
+              aria-label="Open Privacy Policy and Code of Conduct menu"
+              aria-haspopup="menu"
+              aria-expanded="false"
+              aria-controls="policyMenu"
+            >
+              <md-icon>more_vert</md-icon>
+            </md-icon-button>
+            <md-menu
+              id="policyMenu"
+              anchor="policyMenuButton"
+              class="policy-menu"
+              aria-label="Privacy Policy and Code of Conduct menu"
+            >
+              ${policyLinks.map((link) => this.renderPolicyItem(link)).join('')}
+            </md-menu>
+          </div>
         </div>
       </header>
     `;
 
-    this.querySelector('#drawerOpen')?.addEventListener('click', () => this.toggleDrawer());
-    this.querySelector('#drawerClose')?.addEventListener('click', () => this.toggleDrawer(false));
-    this.querySelector<NavigationDrawerElement>('#appDrawer')?.addEventListener(
-      'navigation-drawer-changed',
-      (event) => this.syncDrawerState((event as CustomEvent<{ opened: boolean }>).detail.opened),
-    );
-    this.querySelector('.drawer-home')?.addEventListener('click', () => this.toggleDrawer(false));
+    const themeButton = this.querySelector('#themeMenuButton') as HTMLElement;
+    const policyButton = this.querySelector('#policyMenuButton') as HTMLElement;
+    const themeMenu = this.querySelector('md-menu.theme-menu') as HeaderMenuElement;
+    const policyMenu = this.querySelector('md-menu.policy-menu') as HeaderMenuElement;
 
-    this.querySelectorAll<HTMLElement>('[data-theme-mode]').forEach((item) => {
+    this.setupMenuControl(themeButton, themeMenu, policyMenu);
+    this.setupMenuControl(policyButton, policyMenu, themeMenu);
+
+    this.querySelectorAll<HTMLElement>('md-menu-item[data-theme-mode]').forEach((item) => {
       item.addEventListener('click', () => {
         const nextMode = (item.dataset.themeMode ?? 'system') as ThemeMode;
+        this.closeMenus();
         this.themeController?.setMode(nextMode);
-        this.toggleDrawer(false);
         this.render();
       });
     });
 
-    this.querySelectorAll<HTMLElement>('[data-href]').forEach((item) => {
+    this.querySelectorAll<HTMLElement>('md-menu-item[data-href]').forEach((item) => {
       item.addEventListener('click', () => {
         const href = item.dataset.href ?? '';
-        if (!href) {
-          return;
+        if (href) {
+          this.closeMenus();
+          window.open(href, '_blank', 'noopener,noreferrer');
         }
-
-        this.toggleDrawer(false);
-        window.open(href, '_blank', 'noopener,noreferrer');
       });
     });
   }
 
-  private toggleDrawer(forceOpen?: boolean): void {
-    const drawer = this.querySelector<NavigationDrawerElement>('#appDrawer');
-    if (!drawer) {
+  private setupMenuControl(
+    button: HTMLElement | null,
+    menu: HeaderMenuElement | null,
+    siblingMenu: HeaderMenuElement | null,
+  ): void {
+    if (!button || !menu) {
       return;
     }
 
-    const isOpen = forceOpen ?? !drawer.opened;
-    drawer.opened = isOpen;
-    this.syncDrawerState(isOpen);
+    const setButtonState = (isOpen: boolean) => {
+      button.setAttribute('aria-expanded', String(isOpen));
+      button.toggleAttribute('data-menu-open', isOpen);
+    };
+
+    menu.addEventListener('closed', () => setButtonState(false));
+    setButtonState(menu.open);
+
+    button.addEventListener('click', () => {
+      const shouldOpen = !menu.open;
+
+      this.setMenuOpen(siblingMenu, false);
+      this.setMenuOpen(menu, shouldOpen);
+      setButtonState(shouldOpen);
+    });
+
+    button.addEventListener('keydown', (event) => {
+      const opensMenu = ['Enter', ' ', 'ArrowDown'].includes(event.key);
+      if (!opensMenu) {
+        return;
+      }
+
+      event.preventDefault();
+
+      this.setMenuOpen(siblingMenu, false);
+      this.setMenuOpen(menu, true);
+      setButtonState(true);
+    });
   }
 
-  private syncDrawerState(isOpen: boolean): void {
-    const drawerLayer = this.querySelector<HTMLElement>('#drawerLayer');
-    drawerLayer?.classList.toggle('open', isOpen);
-    drawerLayer?.setAttribute('aria-hidden', String(!isOpen));
-
-    const trigger = this.querySelector<HTMLElement>('#drawerOpen');
-    trigger?.setAttribute('aria-expanded', String(isOpen));
-    trigger?.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
-
-    const triggerIcon = this.querySelector('#drawerOpenIcon');
-    if (triggerIcon) {
-      triggerIcon.textContent = isOpen ? 'menu_open' : 'menu';
+  private setMenuOpen(menu: HeaderMenuElement | null, nextOpen: boolean): void {
+    if (!menu) {
+      return;
     }
+
+    menu.open = nextOpen;
+
+    const trigger = this.querySelector<HTMLElement>(`#${menu.getAttribute('anchor') ?? ''}`);
+    trigger?.setAttribute('aria-expanded', String(nextOpen));
+    trigger?.toggleAttribute('data-menu-open', nextOpen);
+  }
+
+  private closeMenus(): void {
+    this.querySelectorAll<HeaderMenuElement>('md-menu').forEach((menu) => {
+      this.setMenuOpen(menu, false);
+    });
   }
 
   private renderThemeItem(themeMode: ThemeMode, selectedMode: ThemeMode): string {
     const selected = themeMode === selectedMode;
     return `
-      <md-item
-        class="drawer-item"
-        data-theme-mode="${themeMode}"
-        role="button"
-        tabindex="0"
-        aria-pressed="${selected}"
-        ${selected ? 'data-active' : ''}
-      >
-        <span class="drawer-item-container" slot="container" aria-hidden="true"></span>
+      <md-menu-item type="menuitemradio" data-theme-mode="${themeMode}" aria-checked="${selected}" ${selected ? 'selected' : ''}>
         <md-icon slot="start">${themeIcons[themeMode]}</md-icon>
-        ${this.label(themeMode)}
+        <div slot="headline">${this.label(themeMode)}</div>
         ${selected ? '<md-icon slot="end">check</md-icon>' : ''}
-      </md-item>
+      </md-menu-item>
     `;
   }
 
   private renderPolicyItem(link: HeaderLink): string {
     return `
-      <md-item
-        class="drawer-item"
-        data-href="${link.href}"
-        role="link"
-        tabindex="0"
-      >
-        <span class="drawer-item-container" slot="container" aria-hidden="true"></span>
+      <md-menu-item data-href="${link.href}">
         <md-icon slot="start">${link.icon}</md-icon>
-        ${link.label}
-        <md-icon slot="end">open_in_new</md-icon>
-      </md-item>
+        <div slot="headline">${link.label}</div>
+      </md-menu-item>
     `;
   }
 
